@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
@@ -7,25 +5,21 @@ import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detay_sayfa.dart';
-import 'package:yemek_soyle_app/app/ui/views/favorites_page.dart';
-import 'package:yemek_soyle_app/app/ui/views/profile_page.dart';
+
 import 'package:yemek_soyle_app/app/ui/views/sepet_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _AnasayfaState();
+  State<HomeScreen> createState() => _HomePageState();
 }
 
-class _AnasayfaState extends State<HomePage> {
-  void initState() {
-    super.initState();
-    context.read<AnasayfaCubit>().yemekleriYukle();
-  }
-
-  List<String> list = <String>[
+class _HomePageState extends State<HomeScreen> {
+  String dropdownValue = "Alfabetik Artan"; // Varsayılan değer
+  List<String> dropDownList = <String>[
     'Alfabetik Artan',
     'Alfabetik Azalan',
     'Fiyat Artan',
@@ -33,57 +27,96 @@ class _AnasayfaState extends State<HomePage> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    String dropdownValue = "";
+  void initState() {
+    super.initState();
+    context.read<AnasayfaCubit>().yemekleriYukle();
+  }
 
-    var mWidth = MediaQuery.sizeOf(context).width;
-    int _currentIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    var mWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
         centerTitle: true,
-        title: const Text("Yemek Söyle", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text("Yemek Söyle",
+            style:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24, fontStyle: FontStyle.italic)),
       ),
       body: BlocBuilder<AnasayfaCubit, List<Yemekler>>(
         builder: (context, yemeklerListesi) {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: mWidth * 0.7,
-                      child: const TextField(
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                            hintText: " Ara",
-                            suffixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12)))),
-                      ),
+                      width: mWidth * 0.68,
+                      child: TextField(
+                          keyboardType: TextInputType.name,
+                          decoration: const InputDecoration(
+                            hintText: "Yemek Söyle'de Ara",
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 32,
+                            ),
+                            filled: true,
+                            fillColor: Colors.black12,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            context.read<AnasayfaCubit>().searchFoods(value);
+                          }),
                     ),
-                    SizedBox(
-                      child: DropdownMenu<String>(
-                        hintText: "Sırala",
-                        textStyle: TextStyle(fontSize: 12),
-                        width: mWidth * 0.25,
-                        onSelected: (String? value) {
+                    Container(
+                      width: mWidth * 0.25,
+                      height: mWidth * 0.13,
+                      decoration: BoxDecoration(
+                        color: AppColor.primaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButton<String>(
+                        alignment: Alignment.center,
+                        icon: Icon(
+                          Icons.filter_list,
+                          color: AppColor.whiteColor,
+                        ),
+                        value: null,
+                        hint: Text(
+                          "  Sırala",
+                          style: TextStyle(fontSize: 16, color: AppColor.whiteColor),
+                        ),
+                        // Text stilini burada belirtiyorsunuz
+                        onChanged: (String? newValue) {
                           setState(() {
-                            if (value == "Fiyat Artan") {
+                            if (newValue == "Fiyat Artan") {
                               sortCountFood(yemeklerListesi, true);
-                            } else if (value == "Fiyat Azalan") {
+                            } else if (newValue == "Fiyat Azalan") {
                               sortCountFood(yemeklerListesi, false);
-                            } else if (value == "Alfabetik Artan") {
+                            } else if (newValue == "Alfabetik Artan") {
                               sortNameFood(yemeklerListesi, true);
-                            } else if (value == "Alfabetik Azalan") {
+                            } else if (newValue == "Alfabetik Azalan") {
                               sortNameFood(yemeklerListesi, false);
                             }
-                            dropdownValue = value!;
+                            dropdownValue = newValue!;
                           });
                         },
-                        dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-                          return DropdownMenuEntry<String>(value: value, label: value);
+                        items: dropDownList.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(
+                                  fontSize: 10, color: Colors.black), // Text stilini burada belirtiyorsunuz
+                            ),
+                          );
                         }).toList(),
                       ),
                     ),
@@ -97,95 +130,41 @@ class _AnasayfaState extends State<HomePage> {
                         child: GridView.builder(
                           itemCount: yemeklerListesi.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 1 / 1.4, mainAxisSpacing: 10, crossAxisSpacing: 5),
+                            crossAxisCount: 2,
+                            childAspectRatio: 1 / 1.6,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 5,
+                          ),
                           itemBuilder: (context, index) {
                             var yemek = yemeklerListesi[index];
                             return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetaySayfa(yemek: yemek),
-                                      ));
-                                },
-                                child: FoodCard(yemek: yemek, mWidth: mWidth));
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetaySayfa(yemek: yemek),
+                                  ),
+                                );
+                              },
+                              child: FoodCard(
+                                yemek: yemek,
+                                mWidth: mWidth,
+                                isFavoritePage: false,
+                              ),
+                            );
                           },
                         ),
                       )
-                    : Center(child: Text("Yemekler Listesi Yüklenemedi")),
+                    : Center(
+                        child: Text(
+                          "Yükleniyor...",
+                          style: TextStyle(fontSize: 20, color: AppColor.blackColor),
+                        ),
+                      ),
               ),
             ],
           );
         },
-      ),
-
-      //sepete gitmek için floating action button
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.yellow,
-        backgroundColor: AppColor.primaryColor,
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const SepetSayfa())).then(
-            (value) {
-              context.read<SepetSayfaCubit>().sepettekiYemekleriYukle();
-            },
-          );
-        },
-        child: const Icon(
-          Icons.shopping_cart_rounded,
-          size: 40,
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.amber,
-        currentIndex: _currentIndex,
-        unselectedItemColor: AppColor.primaryColor,
-        type: BottomNavigationBarType.shifting,
-        onTap: (index) {
-          if (index == 0) {
-            setState(() {
-              _currentIndex = 0;
-            });
-          } else if (index == 1) {
-            setState(() {
-              _currentIndex = 1;
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FavoritesPage(),
-                  ));
-            });
-          } else {
-            setState(() {
-              _currentIndex = 2;
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                  ));
-            });
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: 30,
-              ),
-              label: "Anasayfa"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite,
-                size: 22,
-              ),
-              label: "Favoriler"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person_2_rounded,
-                size: 22,
-              ),
-              label: "Profil"),
-        ],
       ),
     );
   }

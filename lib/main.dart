@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/home_page.dart';
+import 'package:yemek_soyle_app/app/ui/views/main_tab_view.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -21,12 +22,14 @@ class MyApp extends StatelessWidget {
     ));
     return MultiBlocProvider(
       providers: [
-        //bir tane provider tanımlanıyor bu uygulamada
         BlocProvider(
           create: (context) => AnasayfaCubit(),
         ),
         BlocProvider(
           create: (context) => SepetSayfaCubit(),
+        ),
+        BlocProvider(
+          create: (context) => FavorilerSayfaCubit(),
         ),
       ],
       child: MaterialApp(
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const HomePage(),
+        home: MainPage(),
       ),
     );
   }

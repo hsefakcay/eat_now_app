@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
+import 'package:yemek_soyle_app/app/ui/views/home_page.dart';
+import 'package:yemek_soyle_app/app/ui/views/main_tab_view.dart';
 
 class SepetSayfa extends StatefulWidget {
   const SepetSayfa({super.key});
@@ -30,7 +30,7 @@ class _SepetSayfaState extends State<SepetSayfa> {
         centerTitle: true,
         title: Text(
           "Sepetim",
-          style: TextStyle(color: AppColor.primaryColor, fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColor.blackColor, fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
       body: BlocListener<SepetSayfaCubit, List<SepetYemekler>>(
@@ -81,7 +81,7 @@ class _SepetSayfaState extends State<SepetSayfa> {
                                         Text(
                                           "${yemek.ad}",
                                           style: TextStyle(
-                                              color: AppColor.primaryColor, fontSize: 22, fontWeight: FontWeight.w900),
+                                              color: AppColor.blackColor, fontSize: 22, fontWeight: FontWeight.w900),
                                         ),
                                         Text("Fiyat: ₺${yemek.fiyat}",
                                             style: TextStyle(
@@ -97,7 +97,7 @@ class _SepetSayfaState extends State<SepetSayfa> {
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       IconButton(
                                           onPressed: () {
@@ -112,7 +112,7 @@ class _SepetSayfaState extends State<SepetSayfa> {
                                       Text(
                                         "₺${int.parse(yemek.fiyat) * int.parse(yemek.siparisAdet)}",
                                         style: TextStyle(
-                                            fontSize: 24, fontWeight: FontWeight.w900, color: AppColor.blackColor),
+                                            fontSize: 22, fontWeight: FontWeight.w900, color: AppColor.blackColor),
                                       )
                                     ],
                                   ),
@@ -125,6 +125,7 @@ class _SepetSayfaState extends State<SepetSayfa> {
                 )),
                 Container(
                   height: mHeight * 0.25,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryLightColor),
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10, left: 30, bottom: 10, right: 30),
@@ -160,19 +161,43 @@ class _SepetSayfaState extends State<SepetSayfa> {
                         SizedBox(height: mHeight * 0.02),
                         Container(
                             decoration:
-                                BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColor.amberColor),
+                                BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColor.primaryColor),
                             height: mHeight * 0.07,
                             alignment: Alignment.center,
                             child: TextButton(
-                                onPressed: () {
-                                  print("Sipariş verildi");
-                                  print(sepettekiYemeklerListesi.length);
-                                },
-                                child: Text(
-                                  "SEPETİ ONAYLA",
-                                  style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
-                                )))
+                              child: Text(
+                                "SEPETİ ONAYLA",
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColor.whiteColor),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Siparişiniz hazırlanıyor...",
+                                        style: TextStyle(color: AppColor.primaryColor, fontSize: 24),
+                                      ),
+                                      actions: [
+                                        Center(
+                                            child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(12), color: AppColor.primaryColor),
+                                          child: TextButton(
+                                            child: Text("Tamam",
+                                                style: TextStyle(color: AppColor.whiteColor, fontSize: 24)),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context, MaterialPageRoute(builder: (context) => MainPage()));
+                                            },
+                                          ),
+                                        ))
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ))
                       ],
                     ),
                   ),

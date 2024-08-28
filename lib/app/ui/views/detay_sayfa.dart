@@ -5,7 +5,7 @@ import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
 
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/sepet_sayfa.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/add_or_remove_button_widget.dart';
@@ -25,6 +25,8 @@ class DetaySayfa extends StatefulWidget {
 
 class _DetaySayfaState extends State<DetaySayfa> {
   int siparisAdet = 0;
+  bool isFavorite = false;
+  var favRepo = FavoritesRepository();
 
   void _incrementSiparisAdet() {
     setState(() {
@@ -41,6 +43,20 @@ class _DetaySayfaState extends State<DetaySayfa> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    bool result = await favRepo.favoriYemekMi(widget.yemek.ad);
+    setState(() {
+      isFavorite = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mWidth = MediaQuery.sizeOf(context).width;
     var mHeight = MediaQuery.sizeOf(context).height;
@@ -49,17 +65,31 @@ class _DetaySayfaState extends State<DetaySayfa> {
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
+        backgroundColor: AppColor.whiteColor,
         centerTitle: true,
         title: Text(
           "Ürün Detayı",
-          style: TextStyle(color: AppColor.primaryColor, fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColor.blackColor, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.all(12.0),
-            child: Icon(
-              Icons.favorite,
-              size: mWidth * 0.08,
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: mWidth * 0.08,
+                color: AppColor.primaryColor,
+              ),
+              onPressed: () async {
+                if (isFavorite) {
+                  await favRepo.favorilerdenSil(widget.yemek.ad);
+                } else {
+                  await favRepo.favorilereEkle(widget.yemek);
+                }
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+              },
             ),
           )
         ],
@@ -84,9 +114,9 @@ class _DetaySayfaState extends State<DetaySayfa> {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text(
+                    const Text(
                       //defalut atama
-                      "%${int.parse(widget.yemek.id) * 7} Beğenildi",
+                      "% 87 Beğenildi",
                       style: TextStyle(color: Colors.green, fontSize: 18),
                     )
                   ],
@@ -98,11 +128,11 @@ class _DetaySayfaState extends State<DetaySayfa> {
                 ),
                 Text(
                   "₺ ${widget.yemek.fiyat}",
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColor.blackColor),
                 ),
                 Text(
                   widget.yemek.ad,
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColor.blackColor),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -133,7 +163,7 @@ class _DetaySayfaState extends State<DetaySayfa> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)),
+                        //borderRadius: BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)),
                         color: AppColor.lightgreyColor,
                       ),
                       width: mWidth * 0.5,
@@ -147,7 +177,7 @@ class _DetaySayfaState extends State<DetaySayfa> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                        //borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                         color: AppColor.primaryColor,
                       ),
                       width: mWidth * 0.5,
