@@ -2,31 +2,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
 
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/sepet_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/add_or_remove_button_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/detail_chip_widget.dart';
 
 // ignore: must_be_immutable
-class DetaySayfa extends StatefulWidget {
+class DetailView extends StatefulWidget {
   Yemekler yemek;
-  DetaySayfa({
+  DetailView({
     Key? key,
     required this.yemek,
   }) : super(key: key);
 
   @override
-  State<DetaySayfa> createState() => _DetaySayfaState();
+  State<DetailView> createState() => _DetaySayfaState();
 }
 
-class _DetaySayfaState extends State<DetaySayfa> {
+class _DetaySayfaState extends State<DetailView> {
   int siparisAdet = 0;
   bool isFavorite = false;
   var favRepo = FavoritesRepository();
+
+  final String _title = "Ürün Detayı";
+  final String _addCart = "Sepete Ekle";
+  final String _detailMin = "25-35 dk";
+  final String _detailFree = "Ücretsiz Teslimat";
+  final String _detailDiscount = "İndirim % 10";
+  final String _userName = "hsefakcay";
 
   void _incrementSiparisAdet() {
     setState(() {
@@ -68,8 +76,8 @@ class _DetaySayfaState extends State<DetaySayfa> {
         backgroundColor: AppColor.whiteColor,
         centerTitle: true,
         title: Text(
-          "Ürün Detayı",
-          style: TextStyle(color: AppColor.blackColor, fontSize: 24, fontWeight: FontWeight.bold),
+          _title,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         actions: [
           Padding(
@@ -114,10 +122,10 @@ class _DetaySayfaState extends State<DetaySayfa> {
                     const SizedBox(
                       width: 5,
                     ),
-                    const Text(
+                    Text(
                       //defalut atama
                       "% 87 Beğenildi",
-                      style: TextStyle(color: Colors.green, fontSize: 18),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.green),
                     )
                   ],
                 ),
@@ -126,35 +134,44 @@ class _DetaySayfaState extends State<DetaySayfa> {
                   width: mWidth,
                   height: mHeight * 0.35,
                 ),
+                Text(widget.yemek.ad,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 Text(
                   "₺ ${widget.yemek.fiyat}",
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColor.blackColor),
-                ),
-                Text(
-                  widget.yemek.ad,
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColor.blackColor),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    addOrRemoveButtonWidget(mWidth: mWidth, process: _decrementSiparisAdet, icon: Icons.remove),
+                    addOrRemoveButtonWidget(
+                        mWidth: mWidth, process: _decrementSiparisAdet, icon: Icons.remove),
                     Padding(
                       padding: EdgeInsets.all(20.0),
                       child: Text(
                         "$siparisAdet",
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    addOrRemoveButtonWidget(mWidth: mWidth, process: _incrementSiparisAdet, icon: Icons.add),
+                    addOrRemoveButtonWidget(
+                        mWidth: mWidth, process: _incrementSiparisAdet, icon: Icons.add),
                   ],
                 ),
                 SizedBox(height: mHeight * 0.05),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DetailChipWidget(text: "25-35 dk"),
-                    DetailChipWidget(text: "Ücretsiz Teslimat"),
-                    DetailChipWidget(text: "İndirim %10"),
+                    DetailChipWidget(text: _detailMin),
+                    DetailChipWidget(text: _detailFree),
+                    DetailChipWidget(text: _detailDiscount),
                   ],
                 ),
                 SizedBox(height: mHeight * 0.05),
@@ -162,10 +179,7 @@ class _DetaySayfaState extends State<DetaySayfa> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                        //borderRadius: BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)),
-                        color: AppColor.lightgreyColor,
-                      ),
+                      decoration: ProjectUtility.greyColorBoxDecoration,
                       width: mWidth * 0.5,
                       height: mHeight * 0.08,
                       child: Center(
@@ -176,32 +190,33 @@ class _DetaySayfaState extends State<DetaySayfa> {
                       )),
                     ),
                     Container(
-                      decoration: BoxDecoration(
-                        //borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                        color: AppColor.primaryColor,
-                      ),
+                      decoration: ProjectUtility.primaryColorBoxDecoration,
                       width: mWidth * 0.5,
                       height: mHeight * 0.08,
                       child: Expanded(
                         child: TextButton(
-                          child: Text("Sepete Ekle",
-                              style: TextStyle(color: AppColor.whiteColor, fontSize: 24, fontWeight: FontWeight.bold)),
+                          child: Text(_addCart,
+                              style: TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold)),
                           onPressed: () {
                             if (siparisAdet > 0) {
                               //Sepete ekleme fonksiyonu ve sepet sayfasına gitme
+
                               eklenecekYemek = SepetYemekler(
                                 id: widget.yemek.id,
                                 ad: widget.yemek.ad,
                                 resim: widget.yemek.resim,
                                 fiyat: widget.yemek.fiyat,
                                 siparisAdet: siparisAdet.toString(),
-                                kullaniciAdi: "hsefakcay",
+                                kullaniciAdi: _userName,
                               );
                               context.read<SepetSayfaCubit>().sepeteEkle(eklenecekYemek);
 
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SepetSayfa()),
+                                MaterialPageRoute(builder: (context) => const CartView()),
                               );
                             } else {
                               print("0 adet sipariş girilemez");

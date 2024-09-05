@@ -1,18 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
-import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
 
-class FoodCard extends StatefulWidget {
+class FoodCardWidget extends StatefulWidget {
   Yemekler yemek;
   double mWidth;
   bool isFavoritePage;
 
-  FoodCard({
+  FoodCardWidget({
     Key? key,
     required this.yemek,
     required this.mWidth,
@@ -20,10 +17,10 @@ class FoodCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<FoodCard> createState() => _FoodCardState();
+  State<FoodCardWidget> createState() => _FoodCardState();
 }
 
-class _FoodCardState extends State<FoodCard> {
+class _FoodCardState extends State<FoodCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -42,7 +39,7 @@ class _FoodCardState extends State<FoodCard> {
             Positioned(
                 top: 0,
                 right: 0,
-                child: FavoriteButton(
+                child: FavoriteButtonWidget(
                   widget: widget,
                   yemek: widget.yemek,
                   isFavoritePage: widget.isFavoritePage,
@@ -80,7 +77,8 @@ class _FoodCardState extends State<FoodCard> {
               children: [
                 Text(
                   "₺ ${widget.yemek.fiyat}",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColor.blackColor),
+                  style: TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold, color: AppColor.blackColor),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -95,71 +93,6 @@ class _FoodCardState extends State<FoodCard> {
           )
         ],
       ),
-    );
-  }
-}
-
-class FavoriteButton extends StatefulWidget {
-  FavoriteButton({
-    Key? key,
-    required this.widget,
-    required this.yemek,
-    required this.isFavoritePage,
-  }) : super(key: key);
-
-  final FoodCard widget;
-  final Yemekler yemek;
-  bool isFavoritePage;
-
-  @override
-  State<FavoriteButton> createState() => _FavoriteButtonState();
-}
-
-class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false;
-  var favRepo = FavoritesRepository();
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfFavorite();
-    if (widget.isFavoritePage) {
-      isFavorite = true;
-    }
-  }
-
-  Future<void> _checkIfFavorite() async {
-    bool result = await favRepo.favoriYemekMi(widget.yemek.ad);
-    setState(() {
-      isFavorite = result;
-      if (isFavorite) {
-        print("${widget.yemek.ad} favori yemek");
-      }
-    });
-  }
-
-  void _toggleFavorite() {
-    setState(() {
-      if (isFavorite == false) {
-        favRepo.favorilereEkle(widget.yemek);
-      } else {
-        favRepo.favorilerdenSil(widget.yemek.ad);
-      }
-      isFavorite = !isFavorite;
-      //silindiğinde sayfa güncellemesi
-      context.read<FavorilerSayfaCubit>().favYemekleriYukle();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
-        color: AppColor.primaryColor,
-        size: widget.widget.mWidth * 0.07,
-      ),
-      onPressed: _toggleFavorite,
     );
   }
 }

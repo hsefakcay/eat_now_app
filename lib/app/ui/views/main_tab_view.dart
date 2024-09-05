@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/ui/views/favorites_page.dart';
-import 'package:yemek_soyle_app/app/ui/views/home_page.dart';
-import 'package:yemek_soyle_app/app/ui/views/profile_page.dart';
+import 'package:yemek_soyle_app/app/ui/views/favorites_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/home_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/profile_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,10 +12,11 @@ class MainPage extends StatefulWidget {
 
 class _HomePageState extends State<MainPage> {
   int _currentIndex = 0;
+
   final List<Widget> _pages = [
-    HomeScreen(),
-    FavoritesScreen(),
-    ProfileScreen(),
+    HomeView(),
+    FavoritesView(),
+    ProfileView(),
   ];
 
   void _onTabTapped(int index) {
@@ -29,6 +30,8 @@ class _HomePageState extends State<MainPage> {
     var mWidth = MediaQuery.of(context).size.width;
     var mHeight = MediaQuery.of(context).size.height;
 
+    final double _notchValue = 8;
+
     return Scaffold(
         body: _pages[_currentIndex],
         extendBody: true,
@@ -38,7 +41,7 @@ class _HomePageState extends State<MainPage> {
           color: AppColor.whiteColor,
           height: mHeight * 0.08,
           shape: CircularNotchedRectangle(),
-          notchMargin: 8,
+          notchMargin: _notchValue,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,7 +76,7 @@ class _HomePageState extends State<MainPage> {
                   _onTabTapped(2);
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 width: 0,
               )
             ],

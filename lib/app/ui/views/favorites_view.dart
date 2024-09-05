@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/project_keys.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/detay_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 
-class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+class FavoritesView extends StatefulWidget {
+  const FavoritesView({super.key});
 
   @override
-  State<FavoritesScreen> createState() => _FavoritesPageState();
+  State<FavoritesView> createState() => _FavoritesPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesScreen> {
+class _FavoritesPageState extends State<FavoritesView> {
+  final String _title = "Favoriler";
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<FavorilerSayfaCubit>().favYemekleriYukle();
   }
@@ -28,17 +30,12 @@ class _FavoritesPageState extends State<FavoritesScreen> {
     return Scaffold(
         backgroundColor: AppColor.whiteColor,
         appBar: AppBar(
-          backgroundColor: AppColor.whiteColor,
-          centerTitle: true,
-          title: Text(
-            "Favoriler",
-            style: TextStyle(
-              color: AppColor.blackColor,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+            automaticallyImplyLeading: false,
+            title: Text(_title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold))),
         body: BlocBuilder<FavorilerSayfaCubit, List<Yemekler>>(
           builder: (context, favYemeklerListesi) {
             if (favYemeklerListesi.isNotEmpty) {
@@ -59,10 +56,10 @@ class _FavoritesPageState extends State<FavoritesScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetaySayfa(yemek: yemek),
+                                builder: (context) => DetailView(yemek: yemek),
                               ));
                         },
-                        child: FoodCard(
+                        child: FoodCardWidget(
                           yemek: yemek,
                           mWidth: mWidth,
                           isFavoritePage: true,
@@ -73,8 +70,8 @@ class _FavoritesPageState extends State<FavoritesScreen> {
             } else {
               return Center(
                 child: Text(
-                  "Favori Yemek Ekleyiniz...",
-                  style: TextStyle(fontSize: 20, color: AppColor.blackColor),
+                  ProjectKeys().addFavoriteFood,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               );
             }

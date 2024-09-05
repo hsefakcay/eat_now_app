@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
@@ -35,10 +36,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'YemekSoyle',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        theme: ThemeData.light(
           useMaterial3: true,
-        ),
+        ).copyWith(
+            appBarTheme: AppBarTheme(
+          backgroundColor: AppColor.whiteColor,
+          centerTitle: true,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        )),
         home: MainPage(),
       ),
     );

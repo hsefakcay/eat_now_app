@@ -11,7 +11,10 @@ class DetailChipWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Text(text),
+      label: Text(
+        text,
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
       backgroundColor: AppColor.lightgreyColor,
     );
   }

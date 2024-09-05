@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/project_keys.dart';
+import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/detay_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
 
-import 'package:yemek_soyle_app/app/ui/views/sepet_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomePageState();
+  State<HomeView> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomeScreen> {
+class _HomePageState extends State<HomeView> {
+  final String _title = "Yemek Söyle";
   String dropdownValue = "Alfabetik Artan"; // Varsayılan değer
   List<String> dropDownList = <String>[
     'Alfabetik Artan',
@@ -37,13 +40,16 @@ class _HomePageState extends State<HomeScreen> {
     var mWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
-        centerTitle: true,
-        title: const Text("Yemek Söyle",
-            style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24, fontStyle: FontStyle.italic)),
+        automaticallyImplyLeading: false,
+        title: Text(_title,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
       ),
       body: BlocBuilder<AnasayfaCubit, List<Yemekler>>(
         builder: (context, yemeklerListesi) {
@@ -55,18 +61,18 @@ class _HomePageState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: mWidth * 0.68,
+                      width: mWidth * 0.65,
                       child: TextField(
                           keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            hintText: "Yemek Söyle'de Ara",
-                            prefixIcon: Icon(
+                          decoration: InputDecoration(
+                            hintText: ProjectKeys().searchInYemekSoyle,
+                            prefixIcon: const Icon(
                               Icons.search,
                               size: 32,
                             ),
                             filled: true,
                             fillColor: Colors.black12,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.all(Radius.circular(12)),
                             ),
@@ -76,12 +82,9 @@ class _HomePageState extends State<HomeScreen> {
                           }),
                     ),
                     Container(
-                      width: mWidth * 0.25,
+                      width: mWidth * 0.28,
                       height: mWidth * 0.13,
-                      decoration: BoxDecoration(
-                        color: AppColor.primaryColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      decoration: ProjectUtility.primaryColorBoxDecoration,
                       child: DropdownButton<String>(
                         alignment: Alignment.center,
                         icon: Icon(
@@ -90,10 +93,12 @@ class _HomePageState extends State<HomeScreen> {
                         ),
                         value: null,
                         hint: Text(
-                          "  Sırala",
-                          style: TextStyle(fontSize: 16, color: AppColor.whiteColor),
+                          ProjectKeys().sort,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: AppColor.whiteColor),
                         ),
-                        // Text stilini burada belirtiyorsunuz
                         onChanged: (String? newValue) {
                           setState(() {
                             if (newValue == "Fiyat Artan") {
@@ -111,11 +116,11 @@ class _HomePageState extends State<HomeScreen> {
                         items: dropDownList.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(
-                              value,
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.black), // Text stilini burada belirtiyorsunuz
-                            ),
+                            child: Text(value,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall // Text stilini burada belirtiyorsunuz
+                                ),
                           );
                         }).toList(),
                       ),
@@ -141,12 +146,10 @@ class _HomePageState extends State<HomeScreen> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetaySayfa(yemek: yemek),
-                                  ),
+                                  MaterialPageRoute(builder: (context) => DetailView(yemek: yemek)),
                                 );
                               },
-                              child: FoodCard(
+                              child: FoodCardWidget(
                                 yemek: yemek,
                                 mWidth: mWidth,
                                 isFavoritePage: false,
@@ -157,8 +160,8 @@ class _HomePageState extends State<HomeScreen> {
                       )
                     : Center(
                         child: Text(
-                          "Yükleniyor...",
-                          style: TextStyle(fontSize: 20, color: AppColor.blackColor),
+                          ProjectKeys().loading,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
               ),

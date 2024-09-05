@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/sepet_sayfa.dart';
+import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 
 class MainFloatingActionButton extends StatelessWidget {
   const MainFloatingActionButton({
@@ -17,7 +17,7 @@ class MainFloatingActionButton extends StatelessWidget {
       foregroundColor: AppColor.whiteColor,
       backgroundColor: AppColor.primaryColor,
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const SepetSayfa())).then(
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const CartView())).then(
           (value) {
             context.read<SepetSayfaCubit>().sepettekiYemekleriYukle();
           },
