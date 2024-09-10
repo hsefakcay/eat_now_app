@@ -34,6 +34,8 @@ class _DetaySayfaState extends State<DetailView> {
   final String _detailMin = "25-35 dk";
   final String _detailFree = "Ücretsiz Teslimat";
   final String _detailDiscount = "İndirim % 10";
+  final String _snackBarTitle = "0 adet sipariş girilemez";
+
   final String _userName = "hsefakcay";
 
   void _incrementSiparisAdet() {
@@ -176,30 +178,25 @@ class _DetaySayfaState extends State<DetailView> {
                 ),
                 SizedBox(height: mHeight * 0.05),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      decoration: ProjectUtility.greyColorBoxDecoration,
+                    SizedBox(
                       width: mWidth * 0.5,
-                      height: mHeight * 0.08,
                       child: Center(
-                          child: Text(
-                        //toplam tutar
-                        "₺ ${int.parse(widget.yemek.fiyat) * siparisAdet}",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      )),
+                        child: Text(
+                          //toplam tutar
+                          "₺ ${int.parse(widget.yemek.fiyat) * siparisAdet}",
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                    Container(
-                      decoration: ProjectUtility.primaryColorBoxDecoration,
-                      width: mWidth * 0.5,
+                    SizedBox(
                       height: mHeight * 0.08,
+                      width: mWidth * 0.5,
                       child: Expanded(
-                        child: TextButton(
+                        child: ElevatedButton(
                           child: Text(_addCart,
-                              style: TextStyle(
-                                  color: AppColor.whiteColor,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold)),
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
                           onPressed: () {
                             if (siparisAdet > 0) {
                               //Sepete ekleme fonksiyonu ve sepet sayfasına gitme
@@ -219,7 +216,15 @@ class _DetaySayfaState extends State<DetailView> {
                                 MaterialPageRoute(builder: (context) => const CartView()),
                               );
                             } else {
-                              print("0 adet sipariş girilemez");
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                  _snackBarTitle,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                behavior: SnackBarBehavior.fixed,
+                                duration: Durations.long4,
+                                backgroundColor: AppColor.primaryLightColor,
+                              ));
                             }
                           },
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/project_keys.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
@@ -11,6 +12,7 @@ import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
+import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -40,7 +42,6 @@ class _HomePageState extends State<HomeView> {
     var mWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
@@ -86,6 +87,9 @@ class _HomePageState extends State<HomeView> {
                       height: mWidth * 0.13,
                       decoration: ProjectUtility.primaryColorBoxDecoration,
                       child: DropdownButton<String>(
+                        dropdownColor: AppColor.whiteColor,
+                        borderRadius: BorderRadius.circular(12),
+                        menuWidth: mWidth * 0.3,
                         alignment: Alignment.center,
                         icon: Icon(
                           Icons.filter_list,
@@ -97,7 +101,7 @@ class _HomePageState extends State<HomeView> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
-                              ?.copyWith(color: AppColor.whiteColor),
+                              ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
@@ -158,12 +162,7 @@ class _HomePageState extends State<HomeView> {
                           },
                         ),
                       )
-                    : Center(
-                        child: Text(
-                          ProjectKeys().loading,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
+                    : Center(child: LottieShadowContainerWidget()),
               ),
             ],
           );

@@ -60,7 +60,7 @@ class OrderSummaryWidget extends StatelessWidget {
                 decoration: ProjectUtility.primaryColorBoxDecoration,
                 height: mHeight * 0.07,
                 alignment: Alignment.center,
-                child: CardTextButtonWidget())
+                child: CardTextButtonWidget(totalCoast: totalCoast))
           ],
         ),
       ),

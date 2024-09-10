@@ -4,17 +4,27 @@ import 'package:yemek_soyle_app/sqlite/database_helper.dart';
 class FavoritesRepository {
   Future<List<Yemekler>> favoriYemekleriYukle() async {
     var db = await DatabaseHelper.accesToDatabase();
+    // Null olan satırları sil
+    await db.rawDelete("DELETE FROM favori_yemekler WHERE ad IS NULL");
 
     List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * FROM favori_yemekler");
+
+
     if (maps.isEmpty) {
       print("MAPS BOŞ");
+    } else {
+      print("MAPS DOLU ");
     }
 
     return List.generate(
       maps.length,
       (index) {
         var row = maps[index];
-        return Yemekler(id: row["id"].toString(), ad: row["ad"], resim: row["resim"], fiyat: row["fiyat"].toString());
+        return Yemekler(
+            id: row["id"].toString(),
+            ad: row["ad"],
+            resim: row["resim"],
+            fiyat: row["fiyat"].toString());
       },
     );
   }
@@ -39,7 +49,8 @@ class FavoritesRepository {
   Future<bool> favoriYemekMi(String yemekAdi) async {
     var db = await DatabaseHelper.accesToDatabase();
 
-    List<Map<String, dynamic>> result = await db.query("favori_yemekler", where: "ad = ?", whereArgs: [yemekAdi]);
+    List<Map<String, dynamic>> result =
+        await db.query("favori_yemekler", where: "ad = ?", whereArgs: [yemekAdi]);
     // Eğer sonuç listesi boş değilse, yemek favorilerde var demektir.
     return result.isNotEmpty;
   }

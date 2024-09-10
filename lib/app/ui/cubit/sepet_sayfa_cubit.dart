@@ -10,6 +10,7 @@ class SepetSayfaCubit extends Cubit<List<SepetYemekler>> {
 
   Future<void> sepettekiYemekleriYukle() async {
     var liste = await yrepo.sepettekiYemekleriYukle();
+
     emit(liste);
   }
 

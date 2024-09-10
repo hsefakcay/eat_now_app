@@ -48,10 +48,27 @@ class YemeklerDaoRepository {
   Future<List<SepetYemekler>> sepettekiYemekleriYukle() async {
     var url = "http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php";
     var kullaniciId = {"kullanici_adi": "hsefakcay"};
-    //kullanici id istiyor - post
-    var cevap = await Dio().post(url, data: FormData.fromMap(kullaniciId));
-    print("Sepetteki yemekler yüklendi  ${cevap}");
 
-    return parseSepetYemekler(cevap.data.toString());
+    try {
+      var cevap = await Dio().post(url, data: FormData.fromMap(kullaniciId));
+
+      if (cevap.statusCode == 200) {
+        var jsonData = json.decode(cevap.data);
+
+        // Gelen JSON'da success değeri kontrol ediliyor
+        if (jsonData['success'] == 1 && jsonData['sepet_yemekler'] != null) {
+          print("AAAA");
+          return parseSepetYemekler(cevap.data.toString());
+        } else {
+          print("Sepet boş ya da kullanıcının sepeti bulunamadı.");
+        }
+      } else {
+        print("HTTP isteği başarısız oldu. Kod: ${cevap.statusCode}");
+      }
+    } catch (e) {
+      print("Bir hata oluştu: $e");
+    }
+
+    return [];
   }
 }

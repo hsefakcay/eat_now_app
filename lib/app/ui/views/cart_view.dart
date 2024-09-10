@@ -42,12 +42,7 @@ class _SepetSayfaState extends State<CartView> {
         child: BlocBuilder<SepetSayfaCubit, List<SepetYemekler>>(
           builder: (context, sepettekiYemeklerListesi) {
             int totalCoast = sepettekiYemeklerListesi.fold(
-                0,
-                (sum, yemek) =>
-                    sum +
-                    (int.parse(yemek.fiyat) *
-                        int.parse(yemek
-                            .siparisAdet))); // Değişiklik: totalCoast hesaplaması buraya taşındı.
+                0, (sum, yemek) => sum + (int.parse(yemek.fiyat) * int.parse(yemek.siparisAdet)));
 
             return Column(
               children: [

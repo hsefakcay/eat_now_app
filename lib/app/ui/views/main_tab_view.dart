@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/ui/views/favorites_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/home_view.dart';
@@ -6,12 +7,22 @@ import 'package:yemek_soyle_app/app/ui/views/profile_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 
 class MainPage extends StatefulWidget {
+  final int currentIndex;
+
+  const MainPage({super.key, this.currentIndex = 0});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<MainPage> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.currentIndex; // `currentIndex`'i `_currentIndex`'e atama
+  }
 
   final List<Widget> _pages = [
     HomeView(),

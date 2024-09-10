@@ -4,6 +4,7 @@ class Yemekler {
   String ad;
   String resim;
   String fiyat;
+  
   Yemekler({
     required this.id,
     required this.ad,

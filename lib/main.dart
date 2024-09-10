@@ -39,11 +39,17 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(
           useMaterial3: true,
         ).copyWith(
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+              backgroundColor: AppColor.primaryColor,
+              foregroundColor: AppColor.whiteColor,
+              iconColor: AppColor.whiteColor,
+            )),
             appBarTheme: AppBarTheme(
-          backgroundColor: AppColor.whiteColor,
-          centerTitle: true,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-        )),
+              backgroundColor: AppColor.whiteColor,
+              centerTitle: true,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+            )),
         home: MainPage(),
       ),
     );
