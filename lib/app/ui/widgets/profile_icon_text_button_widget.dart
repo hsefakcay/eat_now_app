@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 
 class ProfileIconTextButton extends StatelessWidget {
   const ProfileIconTextButton({
@@ -28,7 +29,7 @@ class ProfileIconTextButton extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Icon(
                     icon,
-                    size: 24,
+                    size: IconSizes.iconMedium,
                   ),
                 ),
                 Text(text),
@@ -36,7 +37,7 @@ class ProfileIconTextButton extends StatelessWidget {
             ),
             Icon(
               Icons.navigate_next_rounded,
-              size: 24,
+              size: IconSizes.iconMedium,
             )
           ],
         ));

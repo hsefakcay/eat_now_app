@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "228947636832",
+    "project_id": "yemekt",
+    "storage_bucket": "yemekt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228947636832:android:0da1f8862db77277bfc905",
+        "android_client_info": {
+          "package_name": "com.example.yemek_soyle_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9c2pCGD4K1qrnKzWSqhMiyaUYtcvKBiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,6 +6,7 @@ class AppColor {
   static Color primaryLightColor = Color.fromARGB(255, 254, 218, 209);
 
   static Color whiteColor = Colors.white;
+  static Color redColor = Colors.red;
   static Color blackColor = Colors.black;
   static Color? lightgreyColor = Colors.grey[300];
 }

@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FoodCardWidget extends StatefulWidget {
   Yemekler yemek;
@@ -23,6 +25,8 @@ class FoodCardWidget extends StatefulWidget {
 class _FoodCardState extends State<FoodCardWidget> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Card(
       elevation: 10,
       color: AppColor.whiteColor,
@@ -52,17 +56,17 @@ class _FoodCardState extends State<FoodCardWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.thumb_up,
-                color: Colors.green,
-                size: widget.mWidth * 0.05,
-              ),
-              const SizedBox(
-                width: 5,
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(
+                  Icons.thumb_up,
+                  color: Colors.green,
+                  size: IconSizes.iconSmall,
+                ),
               ),
               Text(
                 //defalut atama
-                "% 87 Beğenildi",
+                "% 87 ${localizations.liked}",
                 style: TextStyle(color: Colors.green, fontSize: 13),
               )
             ],
@@ -85,7 +89,7 @@ class _FoodCardState extends State<FoodCardWidget> {
                   child: Icon(
                     Icons.add_circle,
                     color: AppColor.primaryColor,
-                    size: widget.mWidth * 0.085,
+                    size: IconSizes.iconLarge,
                   ),
                 ),
               ],

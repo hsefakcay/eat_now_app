@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/ui/views/favorites_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/home_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/profile_view.dart';
@@ -38,7 +38,6 @@ class _HomePageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    var mWidth = MediaQuery.of(context).size.width;
     var mHeight = MediaQuery.of(context).size.height;
 
     final double _notchValue = 8;
@@ -60,7 +59,7 @@ class _HomePageState extends State<MainPage> {
               IconButton(
                 icon: Icon(
                   _currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined,
-                  size: mHeight * 0.04,
+                  size: IconSizes.iconLarge,
                   color: AppColor.primaryColor,
                 ),
                 onPressed: () {
@@ -70,7 +69,7 @@ class _HomePageState extends State<MainPage> {
               IconButton(
                 icon: Icon(
                   _currentIndex == 1 ? Icons.favorite : Icons.favorite_outline_rounded,
-                  size: mHeight * 0.04,
+                  size: IconSizes.iconLarge,
                   color: AppColor.primaryColor,
                 ),
                 onPressed: () {
@@ -80,7 +79,7 @@ class _HomePageState extends State<MainPage> {
               IconButton(
                 icon: Icon(
                   _currentIndex == 2 ? Icons.person : Icons.person_outline_rounded,
-                  size: mHeight * 0.04,
+                  size: IconSizes.iconLarge,
                   color: AppColor.primaryColor,
                 ),
                 onPressed: () {

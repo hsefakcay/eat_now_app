@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
@@ -28,13 +29,6 @@ class _DetaySayfaState extends State<DetailView> {
   int siparisAdet = 0;
   bool isFavorite = false;
   var favRepo = FavoritesRepository();
-
-  final String _title = "Ürün Detayı";
-  final String _addCart = "Sepete Ekle";
-  final String _detailMin = "25-35 dk";
-  final String _detailFree = "Ücretsiz Teslimat";
-  final String _detailDiscount = "İndirim % 10";
-  final String _snackBarTitle = "0 adet sipariş girilemez";
 
   final String _userName = "hsefakcay";
 
@@ -68,6 +62,8 @@ class _DetaySayfaState extends State<DetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     var mWidth = MediaQuery.sizeOf(context).width;
     var mHeight = MediaQuery.sizeOf(context).height;
     SepetYemekler eklenecekYemek;
@@ -78,7 +74,7 @@ class _DetaySayfaState extends State<DetailView> {
         backgroundColor: AppColor.whiteColor,
         centerTitle: true,
         title: Text(
-          _title,
+          localizations.productDetailTitle,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -87,7 +83,7 @@ class _DetaySayfaState extends State<DetailView> {
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
-                size: mWidth * 0.08,
+                size: IconSizes.iconLarge,
                 color: AppColor.primaryColor,
               ),
               onPressed: () async {
@@ -119,14 +115,14 @@ class _DetaySayfaState extends State<DetailView> {
                     Icon(
                       Icons.thumb_up,
                       color: Colors.green,
-                      size: mWidth * 0.05,
+                      size: IconSizes.iconMedium,
                     ),
                     const SizedBox(
                       width: 5,
                     ),
                     Text(
                       //defalut atama
-                      "% 87 Beğenildi",
+                      "% 87 ${localizations.liked}",
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.green),
                     )
                   ],
@@ -171,9 +167,9 @@ class _DetaySayfaState extends State<DetailView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DetailChipWidget(text: _detailMin),
-                    DetailChipWidget(text: _detailFree),
-                    DetailChipWidget(text: _detailDiscount),
+                    DetailChipWidget(text: localizations.deliveryTime),
+                    DetailChipWidget(text: localizations.freeDelivery),
+                    DetailChipWidget(text: localizations.discount),
                   ],
                 ),
                 SizedBox(height: mHeight * 0.05),
@@ -194,7 +190,7 @@ class _DetaySayfaState extends State<DetailView> {
                       width: mWidth * 0.5,
                       child: Expanded(
                         child: ElevatedButton(
-                          child: Text(_addCart,
+                          child: Text(localizations.addToCart,
                               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
                           onPressed: () {
@@ -218,7 +214,7 @@ class _DetaySayfaState extends State<DetailView> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
-                                  _snackBarTitle,
+                                  localizations.snackBarTitleZeroOrder,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 behavior: SnackBarBehavior.fixed,

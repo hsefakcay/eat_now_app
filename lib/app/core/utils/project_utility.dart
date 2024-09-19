@@ -10,6 +10,14 @@ class ProjectUtility {
   static BoxDecoration primaryColorBoxDecoration =
       BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColor.primaryColor);
 
+  static BoxDecoration signUpBoxDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      color: AppColor.whiteColor,
+      border: Border.all(width: 0.5, color: Colors.black45));
+
+  static BoxDecoration cartDismissibleBoxDecoration =
+      BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColor.redColor);
+
   static BoxDecoration lightColorBoxDecoration =
       BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColor.primaryLightColor);
 

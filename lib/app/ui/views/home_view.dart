@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/core/constants/project_keys.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
-
-import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
 
@@ -22,15 +18,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomeView> {
-  final String _title = "Yemek Söyle";
-  String dropdownValue = "Alfabetik Artan"; // Varsayılan değer
-  List<String> dropDownList = <String>[
-    'Alfabetik Artan',
-    'Alfabetik Azalan',
-    'Fiyat Artan',
-    'Fiyat Azalan',
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -39,14 +26,25 @@ class _HomePageState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     var mWidth = MediaQuery.of(context).size.width;
+
+    String dropdownValue = localizations.sortByAlphabeticalAscending; // Varsayılan değer
+
+    List<String> dropDownList = <String>[
+      localizations.sortByAlphabeticalAscending,
+      localizations.sortByAlphabeticalDescending,
+      localizations.sortByPriceAscending,
+      localizations.sortByPriceDescending,
+    ];
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
         automaticallyImplyLeading: false,
-        title: Text(_title,
+        title: Text(localizations.appName,
             style: Theme.of(context)
                 .textTheme
                 .headlineSmall
@@ -62,14 +60,14 @@ class _HomePageState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: mWidth * 0.65,
+                      width: mWidth * 0.5,
                       child: TextField(
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
-                            hintText: ProjectKeys().searchInYemekSoyle,
+                            hintText: localizations.searchInFoodSoyle,
                             prefixIcon: const Icon(
                               Icons.search,
-                              size: 32,
+                              size: IconSizes.iconMedium,
                             ),
                             filled: true,
                             fillColor: Colors.black12,
@@ -83,21 +81,22 @@ class _HomePageState extends State<HomeView> {
                           }),
                     ),
                     Container(
-                      width: mWidth * 0.28,
+                      width: mWidth * 0.35,
                       height: mWidth * 0.13,
                       decoration: ProjectUtility.primaryColorBoxDecoration,
                       child: DropdownButton<String>(
                         dropdownColor: AppColor.whiteColor,
                         borderRadius: BorderRadius.circular(12),
-                        menuWidth: mWidth * 0.3,
+                        menuWidth: mWidth * 0.4,
                         alignment: Alignment.center,
                         icon: Icon(
                           Icons.filter_list,
                           color: AppColor.whiteColor,
+                          size: IconSizes.iconMedium,
                         ),
                         value: null,
                         hint: Text(
-                          ProjectKeys().sort,
+                          localizations.sort,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
@@ -105,13 +104,13 @@ class _HomePageState extends State<HomeView> {
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
-                            if (newValue == "Fiyat Artan") {
+                            if (newValue == localizations.sortByPriceAscending) {
                               sortCountFood(yemeklerListesi, true);
-                            } else if (newValue == "Fiyat Azalan") {
+                            } else if (newValue == localizations.sortByPriceDescending) {
                               sortCountFood(yemeklerListesi, false);
-                            } else if (newValue == "Alfabetik Artan") {
+                            } else if (newValue == localizations.sortByAlphabeticalAscending) {
                               sortNameFood(yemeklerListesi, true);
-                            } else if (newValue == "Alfabetik Azalan") {
+                            } else if (newValue == localizations.sortByAlphabeticalDescending) {
                               sortNameFood(yemeklerListesi, false);
                             }
                             dropdownValue = newValue!;

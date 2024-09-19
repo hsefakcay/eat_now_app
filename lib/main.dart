@@ -1,13 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/main_tab_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/login_view.dart';
+import 'package:yemek_soyle_app/firebase_options.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -35,7 +43,17 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'YemekSoyle',
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: const [
+          Locale("en", ""),
+          Locale("tr", ""),
+        ],
+        title: "Yemek Soyle",
         theme: ThemeData.light(
           useMaterial3: true,
         ).copyWith(
@@ -50,7 +68,7 @@ class MyApp extends StatelessWidget {
               centerTitle: true,
               systemOverlayStyle: SystemUiOverlayStyle.light,
             )),
-        home: MainPage(),
+        home: LoginView(),
       ),
     );
   }

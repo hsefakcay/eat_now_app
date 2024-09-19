@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
@@ -64,7 +65,7 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
         color: AppColor.primaryColor,
-        size: widget.widget.mWidth * 0.07,
+        size: IconSizes.iconLarge,
       ),
       onPressed: _toggleFavorite,
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 
@@ -11,8 +12,6 @@ class MainFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var mHeight = MediaQuery.of(context).size.height;
-
     return FloatingActionButton(
       foregroundColor: AppColor.whiteColor,
       backgroundColor: AppColor.primaryColor,
@@ -23,9 +22,9 @@ class MainFloatingActionButton extends StatelessWidget {
           },
         );
       },
-      child: Icon(
+      child: const Icon(
         Icons.shopping_cart_sharp,
-        size: mHeight * 0.04,
+        size: IconSizes.iconLarge,
       ),
     );
   }

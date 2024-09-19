@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_text_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   const OrderSummaryWidget({
@@ -14,6 +15,8 @@ class OrderSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Container(
       height: mHeight * 0.25,
       decoration: ProjectUtility.cartBoxDecoration,
@@ -27,7 +30,7 @@ class OrderSummaryWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Gönderim Ücreti:",
+                  "${localizations.shippingCost} :",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
@@ -40,14 +43,14 @@ class OrderSummaryWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Toplam:",
+                  "${localizations.total} :",
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "₺${totalCoast}",
+                  "₺$totalCoast",
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge

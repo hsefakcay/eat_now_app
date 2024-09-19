@@ -4,6 +4,7 @@ import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_card_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/order_summary_widget.dart';
 
 class CartView extends StatefulWidget {
@@ -14,7 +15,6 @@ class CartView extends StatefulWidget {
 }
 
 class _SepetSayfaState extends State<CartView> {
-  final String _title = "Sepetim";
 
   @override
   void initState() {
@@ -26,11 +26,12 @@ class _SepetSayfaState extends State<CartView> {
   Widget build(BuildContext context) {
     var mWidth = MediaQuery.sizeOf(context).width;
     var mHeight = MediaQuery.sizeOf(context).height;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_title,
+        title: Text(localizations.cartViewTitle,
             style:
                 Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
       ),
@@ -58,9 +59,7 @@ class _SepetSayfaState extends State<CartView> {
                         crossAxisSpacing: 5),
                     itemBuilder: (context, index) {
                       var yemek = sepettekiYemeklerListesi[index];
-                      return GestureDetector(
-                          onTap: () {},
-                          child: CartCardWidget(yemek: yemek, mWidth: mWidth, mHeight: mHeight));
+                      return CartCardWidget(yemek: yemek, mWidth: mWidth, mHeight: mHeight);
                     },
                   ),
                 )),
