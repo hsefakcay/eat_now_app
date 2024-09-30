@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
-import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
+import 'package:yemek_soyle_app/app/data/entity/foods.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
+import 'package:yemek_soyle_app/app/ui/widgets/search_text_field_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -21,23 +22,14 @@ class _HomePageState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    context.read<AnasayfaCubit>().yemekleriYukle();
+    context.read<HomeCubit>().loadFoods();
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    var mWidth = MediaQuery.of(context).size.width;
-
-    String dropdownValue = localizations.sortByAlphabeticalAscending; // Varsayılan değer
-
-    List<String> dropDownList = <String>[
-      localizations.sortByAlphabeticalAscending,
-      localizations.sortByAlphabeticalDescending,
-      localizations.sortByPriceAscending,
-      localizations.sortByPriceDescending,
-    ];
+    var mWidth = ScreenUtil.screenWidth(context);
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
@@ -50,7 +42,7 @@ class _HomePageState extends State<HomeView> {
                 .headlineSmall
                 ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
       ),
-      body: BlocBuilder<AnasayfaCubit, List<Yemekler>>(
+      body: BlocBuilder<HomeCubit, List<Foods>>(
         builder: (context, yemeklerListesi) {
           return Column(
             children: [
@@ -60,74 +52,13 @@ class _HomePageState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: mWidth * 0.5,
-                      child: TextField(
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            hintText: localizations.searchInFoodSoyle,
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              size: IconSizes.iconMedium,
-                            ),
-                            filled: true,
-                            fillColor: Colors.black12,
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            context.read<AnasayfaCubit>().searchFoods(value);
-                          }),
+                      width: mWidth * 0.78,
+                      child: searchFoodTextFieldWidget(),
                     ),
                     Container(
-                      width: mWidth * 0.35,
-                      height: mWidth * 0.13,
-                      decoration: ProjectUtility.primaryColorBoxDecoration,
-                      child: DropdownButton<String>(
-                        dropdownColor: AppColor.whiteColor,
-                        borderRadius: BorderRadius.circular(12),
-                        menuWidth: mWidth * 0.4,
-                        alignment: Alignment.center,
-                        icon: Icon(
-                          Icons.filter_list,
-                          color: AppColor.whiteColor,
-                          size: IconSizes.iconMedium,
-                        ),
-                        value: null,
-                        hint: Text(
-                          localizations.sort,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
-                        ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (newValue == localizations.sortByPriceAscending) {
-                              sortCountFood(yemeklerListesi, true);
-                            } else if (newValue == localizations.sortByPriceDescending) {
-                              sortCountFood(yemeklerListesi, false);
-                            } else if (newValue == localizations.sortByAlphabeticalAscending) {
-                              sortNameFood(yemeklerListesi, true);
-                            } else if (newValue == localizations.sortByAlphabeticalDescending) {
-                              sortNameFood(yemeklerListesi, false);
-                            }
-                            dropdownValue = newValue!;
-                          });
-                        },
-                        items: dropDownList.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall // Text stilini burada belirtiyorsunuz
-                                ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                        decoration: ProjectUtility.primaryColorBoxDecoration,
+                        width: mWidth * 0.14,
+                        child: _dropDownMenu(mWidth, context, localizations, yemeklerListesi)),
                   ],
                 ),
               ),
@@ -154,7 +85,6 @@ class _HomePageState extends State<HomeView> {
                               },
                               child: FoodCardWidget(
                                 yemek: yemek,
-                                mWidth: mWidth,
                                 isFavoritePage: false,
                               ),
                             );
@@ -170,8 +100,71 @@ class _HomePageState extends State<HomeView> {
     );
   }
 
-  void sortNameFood(List<Yemekler> yemeklerListesi, bool isDesc) {
-    Comparator<Yemekler> sortName;
+  DropdownMenu<String> _dropDownMenu(
+    double mWidth,
+    BuildContext context,
+    AppLocalizations localizations,
+    List<Foods> yemeklerListesi,
+  ) {
+    return DropdownMenu(
+        menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.resolveWith((
+          states,
+        ) {
+          return AppColor.whiteColor;
+        })),
+        trailingIcon: Icon(Icons.filter_list_rounded),
+        inputDecorationTheme: InputDecorationTheme(suffixIconColor: AppColor.whiteColor),
+        width: mWidth * 0.3,
+        textStyle: Theme.of(context).textTheme.labelSmall,
+        onSelected: (sortType) {
+          if (sortType != null) {
+            setState(() {
+              if (sortType == localizations.sortByPriceAscending) {
+                sortCountFood(yemeklerListesi, true);
+              } else if (sortType == localizations.sortByPriceDescending) {
+                sortCountFood(yemeklerListesi, false);
+              } else if (sortType == localizations.sortByAlphabeticalAscending) {
+                sortNameFood(yemeklerListesi, true);
+              } else if (sortType == localizations.sortByAlphabeticalDescending) {
+                sortNameFood(yemeklerListesi, false);
+              }
+            });
+          }
+        },
+        dropdownMenuEntries: <DropdownMenuEntry<String>>[
+          DropdownMenuEntry(
+            value: localizations.sortByPriceAscending,
+            label: localizations.sortByPriceAscending,
+            style: MenuItemButton.styleFrom(
+              backgroundColor: Colors.white, //unselected background color,
+            ),
+          ),
+          DropdownMenuEntry(
+            value: localizations.sortByPriceDescending,
+            label: localizations.sortByPriceDescending,
+            style: MenuItemButton.styleFrom(
+              backgroundColor: Colors.white, //unselected background color,
+            ),
+          ),
+          DropdownMenuEntry(
+            value: localizations.sortByAlphabeticalAscending,
+            label: localizations.sortByAlphabeticalAscending,
+            style: MenuItemButton.styleFrom(
+              backgroundColor: Colors.white, //unselected background color,
+            ),
+          ),
+          DropdownMenuEntry(
+            value: localizations.sortByAlphabeticalDescending,
+            label: localizations.sortByAlphabeticalDescending,
+            style: MenuItemButton.styleFrom(
+              backgroundColor: Colors.white, //unselected background color,
+            ),
+          ),
+        ]);
+  }
+
+  void sortNameFood(List<Foods> yemeklerListesi, bool isDesc) {
+    Comparator<Foods> sortName;
     if (isDesc == true) {
       sortName = (a, b) => a.ad.compareTo(b.ad);
     } else {
@@ -180,8 +173,8 @@ class _HomePageState extends State<HomeView> {
     yemeklerListesi.sort(sortName);
   }
 
-  void sortCountFood(List<Yemekler> yemeklerListesi, bool isDesc) {
-    Comparator<Yemekler> sortName;
+  void sortCountFood(List<Foods> yemeklerListesi, bool isDesc) {
+    Comparator<Foods> sortName;
 
     if (isDesc == true) {
       sortName = (a, b) => (int.parse(a.fiyat)).compareTo(int.parse(b.fiyat));

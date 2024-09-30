@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_text_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   const OrderSummaryWidget({
     super.key,
-    required this.mHeight,
     required this.totalCoast,
   });
 
-  final double mHeight;
   final int totalCoast;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    var mHeight = ScreenUtil.screenHeight(context);
 
     return Container(
       height: mHeight * 0.25,

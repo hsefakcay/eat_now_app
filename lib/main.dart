@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/anasayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/login_view.dart';
 import 'package:yemek_soyle_app/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,13 +32,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AnasayfaCubit(),
+          create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => SepetSayfaCubit(),
+          create: (context) => CartPageCubit(),
         ),
         BlocProvider(
-          create: (context) => FavorilerSayfaCubit(),
+          create: (context) => FavoritesPageCubit(),
         ),
       ],
       child: MaterialApp(

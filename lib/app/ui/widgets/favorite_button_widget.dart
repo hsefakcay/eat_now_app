@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
-import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
+import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 
 class FavoriteButtonWidget extends StatefulWidget {
@@ -16,7 +16,7 @@ class FavoriteButtonWidget extends StatefulWidget {
   }) : super(key: key);
 
   final FoodCardWidget widget;
-  final Yemekler yemek;
+  final Foods yemek;
   bool isFavoritePage;
 
   @override
@@ -37,7 +37,7 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
   }
 
   Future<void> _checkIfFavorite() async {
-    bool result = await favRepo.favoriYemekMi(widget.yemek.ad);
+    bool result = await favRepo.isFavoriteFood(widget.yemek.ad);
     setState(() {
       isFavorite = result;
       if (isFavorite) {
@@ -49,13 +49,13 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
   void _toggleFavorite() {
     setState(() {
       if (isFavorite == false) {
-        favRepo.favorilereEkle(widget.yemek);
+        favRepo.addToFavorites(widget.yemek);
       } else {
-        favRepo.favorilerdenSil(widget.yemek.ad);
+        favRepo.removeFromFavorites(widget.yemek.ad);
       }
       isFavorite = !isFavorite;
       //silindiğinde sayfa güncellemesi
-      context.read<FavorilerSayfaCubit>().favYemekleriYukle();
+      context.read<FavoritesPageCubit >().loadFavoriteFoods();
     });
   }
 

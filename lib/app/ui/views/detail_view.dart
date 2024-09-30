@@ -3,29 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
-import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
+import 'package:yemek_soyle_app/app/data/entity/cart_foods.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
+import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/add_or_remove_button_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/detail_chip_widget.dart';
 
 // ignore: must_be_immutable
 class DetailView extends StatefulWidget {
-  Yemekler yemek;
+  Foods yemek;
   DetailView({
     Key? key,
     required this.yemek,
   }) : super(key: key);
 
   @override
-  State<DetailView> createState() => _DetaySayfaState();
+  State<DetailView> createState() => _DetailViewState();
 }
 
-class _DetaySayfaState extends State<DetailView> {
+class _DetailViewState extends State<DetailView> {
   int siparisAdet = 0;
   bool isFavorite = false;
   var favRepo = FavoritesRepository();
@@ -54,7 +55,7 @@ class _DetaySayfaState extends State<DetailView> {
   }
 
   Future<void> _checkIfFavorite() async {
-    bool result = await favRepo.favoriYemekMi(widget.yemek.ad);
+    bool result = await favRepo.isFavoriteFood(widget.yemek.ad);
     setState(() {
       isFavorite = result;
     });
@@ -63,10 +64,10 @@ class _DetaySayfaState extends State<DetailView> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    var mHeight = ScreenUtil.screenHeight(context);
+    var mWidth = ScreenUtil.screenWidth(context);
 
-    var mWidth = MediaQuery.sizeOf(context).width;
-    var mHeight = MediaQuery.sizeOf(context).height;
-    SepetYemekler eklenecekYemek;
+    CartFoods eklenecekYemek;
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
@@ -88,9 +89,9 @@ class _DetaySayfaState extends State<DetailView> {
               ),
               onPressed: () async {
                 if (isFavorite) {
-                  await favRepo.favorilerdenSil(widget.yemek.ad);
+                  await favRepo.removeFromFavorites(widget.yemek.ad);
                 } else {
-                  await favRepo.favorilereEkle(widget.yemek);
+                  await favRepo.addToFavorites(widget.yemek);
                 }
                 setState(() {
                   isFavorite = !isFavorite;
@@ -100,7 +101,7 @@ class _DetaySayfaState extends State<DetailView> {
           )
         ],
       ),
-      body: BlocBuilder<SepetSayfaCubit, List<SepetYemekler>>(
+      body: BlocBuilder<CartPageCubit, List<CartFoods>>(
         builder: (context, sepettekiYemekler) {
           return Center(
             child: Column(
@@ -147,8 +148,7 @@ class _DetaySayfaState extends State<DetailView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    addOrRemoveButtonWidget(
-                        mWidth: mWidth, process: _decrementSiparisAdet, icon: Icons.remove),
+                    addOrRemoveButtonWidget(process: _decrementSiparisAdet, icon: Icons.remove),
                     Padding(
                       padding: EdgeInsets.all(20.0),
                       child: Text(
@@ -159,8 +159,7 @@ class _DetaySayfaState extends State<DetailView> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    addOrRemoveButtonWidget(
-                        mWidth: mWidth, process: _incrementSiparisAdet, icon: Icons.add),
+                    addOrRemoveButtonWidget(process: _incrementSiparisAdet, icon: Icons.add),
                   ],
                 ),
                 SizedBox(height: mHeight * 0.05),
@@ -197,7 +196,7 @@ class _DetaySayfaState extends State<DetailView> {
                             if (siparisAdet > 0) {
                               //Sepete ekleme fonksiyonu ve sepet sayfasına gitme
 
-                              eklenecekYemek = SepetYemekler(
+                              eklenecekYemek = CartFoods(
                                 id: widget.yemek.id,
                                 ad: widget.yemek.ad,
                                 resim: widget.yemek.resim,
@@ -205,7 +204,7 @@ class _DetaySayfaState extends State<DetailView> {
                                 siparisAdet: siparisAdet.toString(),
                                 kullaniciAdi: _userName,
                               );
-                              context.read<SepetSayfaCubit>().sepeteEkle(eklenecekYemek);
+                              context.read<CartPageCubit>().addToCart(eklenecekYemek);
 
                               Navigator.push(
                                 context,

@@ -3,21 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
-import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
+import 'package:yemek_soyle_app/app/data/entity/cart_foods.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CartCardWidget extends StatefulWidget {
   const CartCardWidget({
     super.key,
     required this.yemek,
-    required this.mWidth,
-    required this.mHeight,
   });
 
-  final SepetYemekler yemek;
-  final double mWidth;
-  final double mHeight;
+  final CartFoods yemek;
 
   @override
   State<CartCardWidget> createState() => _cartCardWidgetState();
@@ -33,8 +30,8 @@ class _cartCardWidgetState extends State<CartCardWidget> {
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         //sepetten yemek sil
-        context.read<SepetSayfaCubit>().sepettenSil(widget.yemek);
-        context.read<SepetSayfaCubit>().sepettekiYemekleriYukle();
+        context.read<CartPageCubit >().removeFromCart(widget.yemek);
+        context.read<CartPageCubit >().loadCartFoods();
       },
       background: Container(
         decoration: ProjectUtility.cartDismissibleBoxDecoration,
@@ -60,7 +57,7 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                   padding: const EdgeInsets.all(12.0),
                   child: Image.network(
                     "http://kasimadalan.pe.hu/yemekler/resimler/${widget.yemek.resim}",
-                    width: widget.mWidth * 0.3,
+                    width: ScreenUtil.screenWidth(context) * 0.3,
                   ),
                 ),
                 Column(
@@ -88,8 +85,8 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        context.read<SepetSayfaCubit>().sepettenSil(widget.yemek);
-                        context.read<SepetSayfaCubit>().sepettekiYemekleriYukle();
+                        context.read<CartPageCubit >().removeFromCart(widget.yemek);
+                        context.read<CartPageCubit >().loadCartFoods();
                       },
                       icon: Icon(
                         Icons.delete,

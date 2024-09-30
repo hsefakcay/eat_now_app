@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/favori_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/data/entity/foods.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
@@ -15,17 +15,14 @@ class FavoritesView extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesView> {
-
   @override
   void initState() {
     super.initState();
-    context.read<FavorilerSayfaCubit>().favYemekleriYukle();
+    context.read<FavoritesPageCubit >().loadFavoriteFoods();
   }
 
   @override
   Widget build(BuildContext context) {
-    var mWidth = MediaQuery.sizeOf(context).width;
-
     return Scaffold(
         backgroundColor: AppColor.whiteColor,
         appBar: AppBar(
@@ -35,7 +32,7 @@ class _FavoritesPageState extends State<FavoritesView> {
                     .textTheme
                     .headlineSmall
                     ?.copyWith(fontWeight: FontWeight.bold))),
-        body: BlocBuilder<FavorilerSayfaCubit, List<Yemekler>>(
+        body: BlocBuilder<FavoritesPageCubit , List<Foods>>(
           builder: (context, favYemeklerListesi) {
             if (favYemeklerListesi.isNotEmpty) {
               return Padding(
@@ -60,7 +57,6 @@ class _FavoritesPageState extends State<FavoritesView> {
                         },
                         child: FoodCardWidget(
                           yemek: yemek,
-                          mWidth: mWidth,
                           isFavoritePage: true,
                         ));
                   },

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/data/entity/sepet_yemekler.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/sepet_sayfa_cubit.dart';
+import 'package:yemek_soyle_app/app/data/entity/cart_foods.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_card_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/order_summary_widget.dart';
@@ -15,17 +15,15 @@ class CartView extends StatefulWidget {
 }
 
 class _SepetSayfaState extends State<CartView> {
-
   @override
   void initState() {
     super.initState();
-    context.read<SepetSayfaCubit>().sepettekiYemekleriYukle();
+    context.read<CartPageCubit >().loadCartFoods();
   }
 
   @override
   Widget build(BuildContext context) {
-    var mWidth = MediaQuery.sizeOf(context).width;
-    var mHeight = MediaQuery.sizeOf(context).height;
+    
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -36,11 +34,11 @@ class _SepetSayfaState extends State<CartView> {
                 Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
       ),
       backgroundColor: AppColor.whiteColor,
-      body: BlocListener<SepetSayfaCubit, List<SepetYemekler>>(
+      body: BlocListener<CartPageCubit , List<CartFoods>>(
         listener: (context, state) {
           setState(() {}); // Değişiklik: BlocListener eklendi ve setState çağrıldı.
         },
-        child: BlocBuilder<SepetSayfaCubit, List<SepetYemekler>>(
+        child: BlocBuilder<CartPageCubit , List<CartFoods>>(
           builder: (context, sepettekiYemeklerListesi) {
             int totalCoast = sepettekiYemeklerListesi.fold(
                 0, (sum, yemek) => sum + (int.parse(yemek.fiyat) * int.parse(yemek.siparisAdet)));
@@ -59,11 +57,11 @@ class _SepetSayfaState extends State<CartView> {
                         crossAxisSpacing: 5),
                     itemBuilder: (context, index) {
                       var yemek = sepettekiYemeklerListesi[index];
-                      return CartCardWidget(yemek: yemek, mWidth: mWidth, mHeight: mHeight);
+                      return CartCardWidget(yemek: yemek);
                     },
                   ),
                 )),
-                OrderSummaryWidget(mHeight: mHeight, totalCoast: totalCoast)
+                OrderSummaryWidget(totalCoast: totalCoast)
               ],
             );
           },

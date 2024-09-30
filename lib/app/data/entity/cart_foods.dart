@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class SepetYemekler {
+class CartFoods {
   String id;
   String ad;
   String resim;
@@ -8,7 +8,7 @@ class SepetYemekler {
   String siparisAdet;
   String kullaniciAdi;
 
-  SepetYemekler({
+  CartFoods({
     required this.id,
     required this.ad,
     required this.resim,
@@ -17,8 +17,8 @@ class SepetYemekler {
     required this.kullaniciAdi,
   });
 
-  factory SepetYemekler.fromJson(Map<String, dynamic> json) {
-    return SepetYemekler(
+  factory CartFoods.fromJson(Map<String, dynamic> json) {
+    return CartFoods(
         id: json["sepet_yemek_id"] as String,
         ad: json["yemek_adi"] as String,
         resim: json["yemek_resim_adi"] as String,

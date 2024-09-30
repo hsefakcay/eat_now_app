@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/ui/views/favorites_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/home_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/profile_view.dart';
@@ -38,8 +39,6 @@ class _HomePageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    var mHeight = MediaQuery.of(context).size.height;
-
     final double _notchValue = 8;
 
     return Scaffold(
@@ -49,7 +48,7 @@ class _HomePageState extends State<MainPage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BottomAppBar(
           color: AppColor.whiteColor,
-          height: mHeight * 0.08,
+          height: ScreenUtil.screenHeight(context) * 0.08,
           shape: CircularNotchedRectangle(),
           notchMargin: _notchValue,
           child: Row(

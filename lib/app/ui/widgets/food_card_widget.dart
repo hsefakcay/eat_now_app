@@ -2,19 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
-import 'package:yemek_soyle_app/app/data/entity/yemekler.dart';
+import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
+import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FoodCardWidget extends StatefulWidget {
-  Yemekler yemek;
-  double mWidth;
+  Foods yemek;
   bool isFavoritePage;
 
   FoodCardWidget({
     Key? key,
     required this.yemek,
-    required this.mWidth,
     required this.isFavoritePage,
   }) : super(key: key);
 
@@ -37,7 +36,7 @@ class _FoodCardState extends State<FoodCardWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               Image.network(
                 "http://kasimadalan.pe.hu/yemekler/resimler/${widget.yemek.resim}",
-                width: widget.mWidth * 0.4,
+                width: ScreenUtil.screenWidth(context) * 0.4,
               ),
             ]),
             Positioned(
