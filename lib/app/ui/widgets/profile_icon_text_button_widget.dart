@@ -12,7 +12,7 @@ class ProfileIconTextButton extends StatelessWidget {
 
   final String text;
   final IconData icon;
-  final Function()? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

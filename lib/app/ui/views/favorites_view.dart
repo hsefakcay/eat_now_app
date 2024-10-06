@@ -18,7 +18,7 @@ class _FavoritesPageState extends State<FavoritesView> {
   @override
   void initState() {
     super.initState();
-    context.read<FavoritesPageCubit >().loadFavoriteFoods();
+    context.read<FavoritesPageCubit>().loadFavoriteFoods();
   }
 
   @override
@@ -32,7 +32,7 @@ class _FavoritesPageState extends State<FavoritesView> {
                     .textTheme
                     .headlineSmall
                     ?.copyWith(fontWeight: FontWeight.bold))),
-        body: BlocBuilder<FavoritesPageCubit , List<Foods>>(
+        body: BlocBuilder<FavoritesPageCubit, List<Foods>>(
           builder: (context, favYemeklerListesi) {
             if (favYemeklerListesi.isNotEmpty) {
               return Padding(
@@ -51,8 +51,8 @@ class _FavoritesPageState extends State<FavoritesView> {
                         onTap: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailView(yemek: yemek),
+                              MaterialPageRoute<DetailView>(
+                                builder: (context) => DetailView(food: yemek),
                               ));
                         },
                         child: FoodCardWidget(

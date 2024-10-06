@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/utils/toast_helper.dart';
 import 'package:yemek_soyle_app/app/ui/views/login_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/main_tab_view.dart';
 
@@ -18,10 +17,10 @@ class AuthService {
       );
 
       //hata olmazsa ana sayfaya yönlendirir
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<MainPage>(
             builder: (context) => MainPage(),
           ));
     } on FirebaseAuthException catch (e) {
@@ -34,7 +33,7 @@ class AuthService {
         message = "Channel error";
       }
 
-      _showToast(message);
+      ToastHelper.showToast(message);
     } catch (e) {
       print(e);
     }
@@ -51,21 +50,21 @@ class AuthService {
         password: password,
       );
 //hata olmazsa ana sayfaya yönlendirir
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<MainPage>(
             builder: (context) => MainPage(),
           ));
     } on FirebaseAuthException catch (e) {
-      String message = 'Kullanıcı bilgilerini kontrol edin !';
+      String message = 'Kullanici bilgilerini kontrol edin !';
       if (e.code == 'user-not-found') {
         message = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
         message = "Wrong password provided for that user.";
       }
 
-      _showToast(message);
+      ToastHelper.showToast(message);
     } catch (e) {
       print(e);
     }
@@ -74,21 +73,11 @@ class AuthService {
   Future<void> signOut({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
 
-    await Future.delayed(Durations.extralong4);
+    await Future<void>.delayed(Durations.extralong4);
     Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
+        MaterialPageRoute<LoginView>(
           builder: (context) => LoginView(),
         ));
   }
-}
-
-void _showToast(String message) {
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_LONG,
-    gravity: ToastGravity.SNACKBAR,
-    backgroundColor: AppColor.redColor,
-    fontSize: 16,
-  );
 }

@@ -41,7 +41,8 @@ class CartAlertDialogWidget extends StatelessWidget {
                             .headlineSmall
                             ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                      Navigator.push(
+                          context, MaterialPageRoute<MainPage>(builder: (context) => MainPage()));
                     },
                   ),
                 ),

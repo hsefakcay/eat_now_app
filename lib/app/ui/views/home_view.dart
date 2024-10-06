@@ -80,7 +80,8 @@ class _HomePageState extends State<HomeView> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => DetailView(yemek: yemek)),
+                                  MaterialPageRoute<DetailView>(
+                                      builder: (context) => DetailView(food: yemek)),
                                 );
                               },
                               child: FoodCardWidget(

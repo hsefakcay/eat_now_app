@@ -6,6 +6,7 @@ import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yemek_soyle_app/app/ui/widgets/food_image_widget.dart';
 
 class FoodCardWidget extends StatefulWidget {
   Foods yemek;
@@ -33,17 +34,11 @@ class _FoodCardState extends State<FoodCardWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Stack(children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Image.network(
-                "http://kasimadalan.pe.hu/yemekler/resimler/${widget.yemek.resim}",
-                width: ScreenUtil.screenWidth(context) * 0.4,
-              ),
-            ]),
+            FoodImage(height: ScreenUtil.screenHeight(context) * 0.5, name: widget.yemek.resim),
             Positioned(
                 top: 0,
                 right: 0,
                 child: FavoriteButtonWidget(
-                  widget: widget,
                   yemek: widget.yemek,
                   isFavoritePage: widget.isFavoritePage,
                 )),

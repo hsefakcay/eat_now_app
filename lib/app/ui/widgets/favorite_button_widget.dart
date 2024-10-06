@@ -5,17 +5,14 @@ import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 
 class FavoriteButtonWidget extends StatefulWidget {
   FavoriteButtonWidget({
     Key? key,
-    required this.widget,
     required this.yemek,
     required this.isFavoritePage,
   }) : super(key: key);
 
-  final FoodCardWidget widget;
   final Foods yemek;
   bool isFavoritePage;
 
@@ -55,7 +52,7 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
       }
       isFavorite = !isFavorite;
       //silindiğinde sayfa güncellemesi
-      context.read<FavoritesPageCubit >().loadFavoriteFoods();
+      context.read<FavoritesPageCubit>().loadFavoriteFoods();
     });
   }
 

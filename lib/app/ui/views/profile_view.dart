@@ -80,7 +80,7 @@ class _ProfileViewState extends State<ProfileView> with TickerProviderStateMixin
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            MaterialPageRoute<MainPage>(
                                 builder: (context) => const MainPage(currentIndex: 1)),
                           );
                         }),

@@ -11,8 +11,9 @@ class CartFoodsResponse {
     var jsonArray = json["sepet_yemekler"] as List;
     var success = json["success"] as int;
 
-    var yemekler =
-        jsonArray.map((jsonArrayNesnesi) => CartFoods.fromJson(jsonArrayNesnesi)).toList();
+    var yemekler = (jsonArray)
+        .map((jsonArrayNesnesi) => CartFoods.fromJson(jsonArrayNesnesi as Map<String, dynamic>))
+        .toList();
 
     return CartFoodsResponse(cartFoods: yemekler, success: success);
   }

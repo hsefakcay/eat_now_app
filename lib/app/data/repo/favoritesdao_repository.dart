@@ -1,5 +1,5 @@
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
-import 'package:yemek_soyle_app/sqlite/database_helper.dart';
+import 'package:yemek_soyle_app/assets/database/sqlite/database_helper.dart';
 
 class FavoritesRepository {
   Future<List<Foods>> loadFavoriteFoods() async {
@@ -21,8 +21,8 @@ class FavoritesRepository {
         var row = maps[index];
         return Foods(
             id: row["id"].toString(),
-            ad: row["ad"],
-            resim: row["resim"],
+            ad: row["ad"].toString(),
+            resim: row["resim"].toString(),
             fiyat: row["fiyat"].toString());
       },
     );

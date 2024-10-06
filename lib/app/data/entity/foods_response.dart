@@ -10,7 +10,9 @@ class FoodsResponse {
     var jsonArray = json["yemekler"] as List;
     var success = json["success"] as int;
 
-    var foodsList = jsonArray.map((jsonArrayObject) => Foods.fromJson(jsonArrayObject)).toList();
+    var foodsList = (jsonArray)
+        .map((jsonArrayObject) => Foods.fromJson(jsonArrayObject as Map<String, dynamic>))
+        .toList();
 
     return FoodsResponse(foods: foodsList, success: success);
   }

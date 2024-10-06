@@ -16,9 +16,10 @@ class MainFloatingActionButton extends StatelessWidget {
       foregroundColor: AppColor.whiteColor,
       backgroundColor: AppColor.primaryColor,
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const CartView())).then(
+        Navigator.push(context, MaterialPageRoute<CartView>(builder: (context) => const CartView()))
+            .then(
           (value) {
-            context.read<CartPageCubit >().loadCartFoods();
+            context.read<CartPageCubit>().loadCartFoods();
           },
         );
       },

@@ -186,7 +186,7 @@ class LoginView extends StatelessWidget {
                   ..onTap = () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignupView()),
+                      MaterialPageRoute<SignupView>(builder: (context) => SignupView()),
                     );
                   }),
           ])),

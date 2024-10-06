@@ -9,6 +9,7 @@ class CardTextButtonWidget extends StatefulWidget {
     super.key,
     required this.totalCoast,
   });
+  // The total cost of the items in the cart.
   final int totalCoast;
 
   @override
@@ -28,26 +29,33 @@ class _CardTextButtonWidgetState extends State<CardTextButtonWidget> {
   Widget build(BuildContext context) {
     return TextButton(
       child: Text(
-        AppLocalizations.of(context)!.confirmCart,
+        context.localizedConfirmCart,
         style: Theme.of(context)
             .textTheme
             .titleLarge
             ?.copyWith(fontWeight: FontWeight.bold, color: AppColor.whiteColor),
       ),
       onPressed: () {
-        if (widget.totalCoast > 0) {
-          notificationService.showNotification(
-            AppLocalizations.of(context)!.appName,
-            AppLocalizations.of(context)!.orderPreparing,
-          );
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const CartAlertDialogWidget();
-            },
-          );
-        }
+        if (widget.totalCoast <= 0) return;
+
+        notificationService.showNotification(
+          context.localizedAppName,
+          context.localizedOrderPreparing,
+        );
+        showDialog<CartAlertDialogWidget>(
+          context: context,
+          builder: (context) {
+            return const CartAlertDialogWidget();
+          },
+        );
       },
     );
   }
+}
+
+/// Extension for easier access to localization strings.
+extension LocalizationExtension on BuildContext {
+  String get localizedConfirmCart => AppLocalizations.of(this)!.confirmCart;
+  String get localizedAppName => AppLocalizations.of(this)!.appName;
+  String get localizedOrderPreparing => AppLocalizations.of(this)!.orderPreparing;
 }
