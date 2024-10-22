@@ -7,14 +7,6 @@ YemekSöyleApp, kullanıcıların çeşitli yiyecekleri gözden geçirebileceği
 ## Technologies - Teknolojiler
 This project uses the following packages:
 
-flutter: Flutter SDK
-dio: HTTP requests
-flutter_bloc: BLoC management
-path: File paths
-sqflite: SQLite database
-lottie: Animations
-cupertino_icons: iOS icons
-
 ◾ Flutter for building a beautiful, responsive UI
 
 ◾ Dio for handling HTTP requests
