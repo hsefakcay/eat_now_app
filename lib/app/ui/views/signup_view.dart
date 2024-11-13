@@ -13,7 +13,6 @@ class SignupView extends StatelessWidget {
 
   final String _hintTitle = 'hsaforwork@gmail.com';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,30 +67,25 @@ class SignupView extends StatelessWidget {
                 ),
                 Positioned(
                   top: MediaQuery.sizeOf(context).height *
-                      0.2, // Yukarıda konumlandıryerine, alt kısma sabitle
+                      0.05, // Yukarıda konumlandıryerine, alt kısma sabitle
                   left: 0, // Sol hizalama ekleyelim
                   right: 0,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Container(
                       decoration: ProjectUtility.signUpBoxDecoration,
-                      height: MediaQuery.sizeOf(context).height * 0.5,
+                      height: MediaQuery.sizeOf(context).height * 0.73,
                       child: SafeArea(
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.all(24),
                           child: Column(
                             children: [
-                              const SizedBox(
-                                height: 50,
-                              ),
-                              _emailAddress(context),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              _password(context),
-                              const SizedBox(
-                                height: 50,
-                              ),
+                              _nameSurnameField(context),
+                              const SizedBox(height: 20),
+                              _emailAddressField(context),
+                              const SizedBox(height: 20),
+                              _passwordField(context),
+                              const SizedBox(height: 50),
                               _signupButton(context),
                             ],
                           ),
@@ -104,7 +98,35 @@ class SignupView extends StatelessWidget {
         ));
   }
 
-  Widget _emailAddress(BuildContext context) {
+  Widget _nameSurnameField(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Name Surname",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TextField(
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+              filled: true,
+              hintText: "Hüseyin Sefa",
+              hintStyle: TextStyle(
+                  color: AppColor.lightgreyColor, fontWeight: FontWeight.normal, fontSize: 14),
+              fillColor: const Color(0xffF7F7F9),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none, borderRadius: BorderRadius.circular(14))),
+        )
+      ],
+    );
+  }
+
+  Widget _emailAddressField(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +154,7 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  Widget _password(BuildContext context) {
+  Widget _passwordField(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

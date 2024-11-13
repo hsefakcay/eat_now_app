@@ -29,7 +29,7 @@ class _HomePageState extends State<HomeView> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    var mWidth = ScreenUtil.screenWidth(context);
+    final mWidth = ScreenUtil.screenWidth(context);
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,

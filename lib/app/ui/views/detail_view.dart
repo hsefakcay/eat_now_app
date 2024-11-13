@@ -95,10 +95,9 @@ class _DetailViewState extends State<DetailView> {
             FoodImage(height: height, name: widget.food.resim),
             _foodDetails(context),
             _orderQuantityRow(context),
-            SizedBox(height: height * 0.05),
             _detailChips(localizations),
             SizedBox(height: height * 0.05),
-            _totalPriceText(width, height, localizations, context),
+            _totalPriceRow(width, height, localizations, context),
           ],
         ),
       ),
@@ -106,7 +105,7 @@ class _DetailViewState extends State<DetailView> {
   }
 
 //siparişin toplam fiyatını gösteren text
-  Row _totalPriceText(
+  Row _totalPriceRow(
       double width, double height, AppLocalizations localizations, BuildContext context) {
     return Row(
       children: [
@@ -160,13 +159,12 @@ class _DetailViewState extends State<DetailView> {
               //Sepete ekleme fonksiyonu ve sepet sayfasına gitme
 
               final cartItem = CartFoods(
-                id: widget.food.id,
-                ad: widget.food.ad,
-                resim: widget.food.resim,
-                fiyat: widget.food.fiyat,
-                siparisAdet: siparisAdet.toString(),
-                kullaniciAdi: _userName,
-              );
+                  id: widget.food.id,
+                  ad: widget.food.ad,
+                  resim: widget.food.resim,
+                  fiyat: widget.food.fiyat,
+                  siparisAdet: siparisAdet.toString(),
+                  kullaniciAdi: _userName);
               context.read<CartPageCubit>().addToCart(cartItem);
 
               Navigator.push(
@@ -208,7 +206,7 @@ class _DetailViewState extends State<DetailView> {
         )
       ],
     );
-  } // Ürün resmi gösterimi
+  }
 
   // Ürün bilgileri gösterimi
   Column _foodDetails(BuildContext context) {

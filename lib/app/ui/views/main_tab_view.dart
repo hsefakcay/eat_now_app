@@ -46,50 +46,54 @@ class _HomePageState extends State<MainPage> {
         extendBody: true,
         floatingActionButton: MainFloatingActionButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: BottomAppBar(
-          color: AppColor.whiteColor,
-          height: ScreenUtil.screenHeight(context) * 0.08,
-          shape: CircularNotchedRectangle(),
-          notchMargin: _notchValue,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  _currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined,
-                  size: IconSizes.iconLarge,
-                  color: AppColor.primaryColor,
-                ),
-                onPressed: () {
-                  _onTabTapped(0);
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  _currentIndex == 1 ? Icons.favorite : Icons.favorite_outline_rounded,
-                  size: IconSizes.iconLarge,
-                  color: AppColor.primaryColor,
-                ),
-                onPressed: () {
-                  _onTabTapped(1);
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  _currentIndex == 2 ? Icons.person : Icons.person_outline_rounded,
-                  size: IconSizes.iconLarge,
-                  color: AppColor.primaryColor,
-                ),
-                onPressed: () {
-                  _onTabTapped(2);
-                },
-              ),
-              const SizedBox(
-                width: 0,
-              )
-            ],
+        bottomNavigationBar: _bottomAppBar(context, _notchValue));
+  }
+
+  BottomAppBar _bottomAppBar(BuildContext context, double _notchValue) {
+    return BottomAppBar(
+      color: AppColor.whiteColor,
+      height: ScreenUtil.screenHeight(context) * 0.08,
+      padding: EdgeInsets.only(bottom: 3),
+      shape: const CircularNotchedRectangle(),
+      notchMargin: _notchValue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              _currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined,
+              size: IconSizes.iconLarge,
+              color: AppColor.primaryColor,
+            ),
+            onPressed: () {
+              _onTabTapped(0);
+            },
           ),
-        ));
+          IconButton(
+            icon: Icon(
+              _currentIndex == 1 ? Icons.favorite : Icons.favorite_outline_rounded,
+              size: IconSizes.iconLarge,
+              color: AppColor.primaryColor,
+            ),
+            onPressed: () {
+              _onTabTapped(1);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              _currentIndex == 2 ? Icons.person : Icons.person_outline_rounded,
+              size: IconSizes.iconLarge,
+              color: AppColor.primaryColor,
+            ),
+            onPressed: () {
+              _onTabTapped(2);
+            },
+          ),
+          const SizedBox(
+            width: 0,
+          )
+        ],
+      ),
+    );
   }
 }

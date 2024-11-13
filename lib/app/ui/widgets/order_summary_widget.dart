@@ -1,14 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_text_button_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   const OrderSummaryWidget({
-    super.key,
+    Key? key,
     required this.totalCoast,
-  });
+  }) : super(key: key);
 
   final int totalCoast;
 

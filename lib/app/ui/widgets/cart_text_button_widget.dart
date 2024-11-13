@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/cart_alert_dialog_widget.dart';
 import 'package:yemek_soyle_app/services/notification_service.dart';
 
@@ -42,10 +42,11 @@ class _CardTextButtonWidgetState extends State<CardTextButtonWidget> {
           context.localizedAppName,
           context.localizedOrderPreparing,
         );
-        showDialog<CartAlertDialogWidget>(
+        showDialog<CartDialog>(
           context: context,
+          barrierDismissible: false,
           builder: (context) {
-            return const CartAlertDialogWidget();
+            return CartDialog(context: context);
           },
         );
       },

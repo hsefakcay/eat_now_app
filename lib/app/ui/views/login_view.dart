@@ -58,14 +58,14 @@ class LoginView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Container(
                     decoration: ProjectUtility.signUpBoxDecoration,
-                    height: MediaQuery.sizeOf(context).height * 0.5,
+                    height: MediaQuery.sizeOf(context).height * 0.6,
                     child: SafeArea(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: MediaQuery.sizeOf(context).height * 0.5, // Yüksekliği sınırla
                         ),
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.all(24),
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
