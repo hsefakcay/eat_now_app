@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
-import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/detail_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yemek_soyle_app/app/ui/views/detail_page/detail_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/home_page/home_view_mixin.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/search_text_field_widget.dart';
@@ -18,32 +18,22 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomeView> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomeCubit>().loadFoods();
-  }
-
+class _HomePageState extends State<HomeView> with HomeViewMixin {
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-
-    final mWidth = ScreenUtil.screenWidth(context);
-
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.primaryColor,
         automaticallyImplyLeading: false,
-        title: Text(localizations.appName,
+        title: Text(localization().appName,
             style: Theme.of(context)
                 .textTheme
                 .headlineSmall
                 ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
       ),
       body: BlocBuilder<HomeCubit, List<Foods>>(
-        builder: (context, yemeklerListesi) {
+        builder: (context, foodList) {
           return Column(
             children: [
               Padding(
@@ -52,22 +42,22 @@ class _HomePageState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: mWidth * 0.78,
-                      child: searchFoodTextFieldWidget(),
+                      width: getWidth() * 0.78,
+                      child: const searchFoodTextFieldWidget(),
                     ),
                     Container(
                         decoration: ProjectUtility.primaryColorBoxDecoration,
-                        width: mWidth * 0.14,
-                        child: _dropDownMenu(mWidth, context, localizations, yemeklerListesi)),
+                        width: getWidth() * 0.14,
+                        child: _dropDownMenu(getWidth(), context, localization(), foodList)),
                   ],
                 ),
               ),
               Expanded(
-                child: yemeklerListesi.isNotEmpty
+                child: foodList.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GridView.builder(
-                          itemCount: yemeklerListesi.length,
+                          itemCount: foodList.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             childAspectRatio: 1 / 1.6,
@@ -75,7 +65,7 @@ class _HomePageState extends State<HomeView> {
                             crossAxisSpacing: 5,
                           ),
                           itemBuilder: (context, index) {
-                            var yemek = yemeklerListesi[index];
+                            final yemek = foodList[index];
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -84,15 +74,12 @@ class _HomePageState extends State<HomeView> {
                                       builder: (context) => DetailView(food: yemek)),
                                 );
                               },
-                              child: FoodCardWidget(
-                                yemek: yemek,
-                                isFavoritePage: false,
-                              ),
+                              child: FoodCardWidget(yemek: yemek, isFavoritePage: false),
                             );
                           },
                         ),
                       )
-                    : Center(child: LottieShadowContainerWidget()),
+                    : const Center(child: LottieShadowContainerWidget()),
               ),
             ],
           );
@@ -105,7 +92,7 @@ class _HomePageState extends State<HomeView> {
     double mWidth,
     BuildContext context,
     AppLocalizations localizations,
-    List<Foods> yemeklerListesi,
+    List<Foods> foodsList,
   ) {
     return DropdownMenu(
         menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.resolveWith((
@@ -118,19 +105,7 @@ class _HomePageState extends State<HomeView> {
         width: mWidth * 0.3,
         textStyle: Theme.of(context).textTheme.labelSmall,
         onSelected: (sortType) {
-          if (sortType != null) {
-            setState(() {
-              if (sortType == localizations.sortByPriceAscending) {
-                sortCountFood(yemeklerListesi, true);
-              } else if (sortType == localizations.sortByPriceDescending) {
-                sortCountFood(yemeklerListesi, false);
-              } else if (sortType == localizations.sortByAlphabeticalAscending) {
-                sortNameFood(yemeklerListesi, true);
-              } else if (sortType == localizations.sortByAlphabeticalDescending) {
-                sortNameFood(yemeklerListesi, false);
-              }
-            });
-          }
+          sortFoods(sortType, foodsList);
         },
         dropdownMenuEntries: <DropdownMenuEntry<String>>[
           DropdownMenuEntry(
@@ -162,26 +137,5 @@ class _HomePageState extends State<HomeView> {
             ),
           ),
         ]);
-  }
-
-  void sortNameFood(List<Foods> yemeklerListesi, bool isDesc) {
-    Comparator<Foods> sortName;
-    if (isDesc == true) {
-      sortName = (a, b) => a.ad.compareTo(b.ad);
-    } else {
-      sortName = (a, b) => b.ad.compareTo(a.ad);
-    }
-    yemeklerListesi.sort(sortName);
-  }
-
-  void sortCountFood(List<Foods> yemeklerListesi, bool isDesc) {
-    Comparator<Foods> sortName;
-
-    if (isDesc == true) {
-      sortName = (a, b) => (int.parse(a.fiyat)).compareTo(int.parse(b.fiyat));
-    } else {
-      sortName = (a, b) => (int.parse(b.fiyat)).compareTo(int.parse(a.fiyat));
-    }
-    yemeklerListesi.sort(sortName);
   }
 }

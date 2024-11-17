@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/utils/toast_helper.dart';
-import 'package:yemek_soyle_app/app/ui/views/login_view.dart';
-import 'package:yemek_soyle_app/app/ui/views/main_tab_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/login_page/login_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/main_tab_page/main_tab_view.dart';
 
 class AuthService {
   Future<void> signUp({

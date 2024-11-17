@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/cart_page/cart_view.dart';
 
 class MainFloatingActionButton extends StatelessWidget {
   const MainFloatingActionButton({

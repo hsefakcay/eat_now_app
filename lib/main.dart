@@ -2,20 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/login_view.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
+import 'package:yemek_soyle_app/app/ui/views/login_page/login_view.dart';
 import 'package:yemek_soyle_app/firebase_options.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   runApp(const MyApp());
 }
 
@@ -53,7 +50,7 @@ class MyApp extends StatelessWidget {
           Locale("en", ""),
           Locale("tr", ""),
         ],
-        title: "Yemek Soyle",
+        title: 'Yemek Soyle',
         theme: ThemeData.light(
           useMaterial3: true,
         ).copyWith(

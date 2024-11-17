@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
-import 'package:yemek_soyle_app/app/ui/views/favorites_view.dart';
-import 'package:yemek_soyle_app/app/ui/views/home_view.dart';
-import 'package:yemek_soyle_app/app/ui/views/profile_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/main_tab_page/main_tab_mixin.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,85 +11,63 @@ class MainPage extends StatefulWidget {
   const MainPage({super.key, this.currentIndex = 0});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _HomePageState extends State<MainPage> {
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = widget.currentIndex; // `currentIndex`'i `_currentIndex`'e atama
-  }
-
-  final List<Widget> _pages = [
-    HomeView(),
-    FavoritesView(),
-    ProfileView(),
-  ];
-
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
+class _MainPageState extends State<MainPage> with MainTabMixin {
   @override
   Widget build(BuildContext context) {
-    final double _notchValue = 8;
-
     return Scaffold(
-        body: _pages[_currentIndex],
+        body: pages[currentIndex],
         extendBody: true,
         floatingActionButton: MainFloatingActionButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: _bottomAppBar(context, _notchValue));
+        bottomNavigationBar: _bottomAppBar(context, notchValue));
   }
 
-  BottomAppBar _bottomAppBar(BuildContext context, double _notchValue) {
+
+  //BottomNavigationBar widget
+  BottomAppBar _bottomAppBar(BuildContext context, double notchValue) {
     return BottomAppBar(
       color: AppColor.whiteColor,
       height: ScreenUtil.screenHeight(context) * 0.08,
-      padding: EdgeInsets.only(bottom: 3),
+      padding: const EdgeInsets.only(bottom: 3),
       shape: const CircularNotchedRectangle(),
-      notchMargin: _notchValue,
+      notchMargin: notchValue,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
             icon: Icon(
-              _currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined,
+              currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined,
               size: IconSizes.iconLarge,
               color: AppColor.primaryColor,
             ),
             onPressed: () {
-              _onTabTapped(0);
+              onTabTapped(0);
+            }
+          ),
+          IconButton(
+            icon: Icon(
+              currentIndex == 1 ? Icons.favorite : Icons.favorite_outline_rounded,
+              size: IconSizes.iconLarge,
+              color: AppColor.primaryColor,
+            ),
+            onPressed: () {
+              onTabTapped(1);
             },
           ),
           IconButton(
             icon: Icon(
-              _currentIndex == 1 ? Icons.favorite : Icons.favorite_outline_rounded,
+              currentIndex == 2 ? Icons.person : Icons.person_outline_rounded,
               size: IconSizes.iconLarge,
               color: AppColor.primaryColor,
             ),
             onPressed: () {
-              _onTabTapped(1);
+              onTabTapped(2);
             },
           ),
-          IconButton(
-            icon: Icon(
-              _currentIndex == 2 ? Icons.person : Icons.person_outline_rounded,
-              size: IconSizes.iconLarge,
-              color: AppColor.primaryColor,
-            ),
-            onPressed: () {
-              _onTabTapped(2);
-            },
-          ),
-          const SizedBox(
-            width: 0,
-          )
+          const SizedBox(width: 0),
         ],
       ),
     );

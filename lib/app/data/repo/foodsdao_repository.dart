@@ -12,29 +12,28 @@ class FoodsDaoRepository {
     return FoodsResponse.fromJson(decoded).foods;
   }
 
-  List<CartFoods> parseCartFoods(String cevap) {
-    final decoded = json.decode(cevap) as Map<String, dynamic>;
+  List<CartFoods> parseCartFoods(String response) {
+    final decoded = json.decode(response) as Map<String, dynamic>;
     return CartFoodsResponse.fromJson(decoded).cartFoods;
   }
 
   Future<List<Foods>> loadFoods() async {
     final url = "http://kasimadalan.pe.hu/yemekler/tumYemekleriGetir.php";
-    final cevap = await Dio().get(url);
+    final response = await Dio().get<dynamic>(url);
 
-    return parseFoods(cevap.data.toString());
+    return parseFoods(response.data.toString());
   }
 
-  Future<void> addToCart(CartFoods eklenecekYemek) async {
+  Future<void> addToCart(CartFoods cartFood) async {
     var url = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php";
     var data = {
-      "yemek_adi": eklenecekYemek.ad,
-      "yemek_resim_adi": eklenecekYemek.resim,
-      "yemek_fiyat": eklenecekYemek.fiyat,
-      "yemek_siparis_adet": eklenecekYemek.siparisAdet,
-      "kullanici_adi": eklenecekYemek.kullaniciAdi
+      "yemek_adi": cartFood.ad,
+      "yemek_resim_adi": cartFood.resim,
+      "yemek_fiyat": cartFood.fiyat,
+      "yemek_siparis_adet": cartFood.siparisAdet,
+      "kullanici_adi": cartFood.kullaniciAdi
     };
-    var response = await Dio().post(url, data: FormData.fromMap(data));
-    print("Sepete yemek ekle : ${response.data.toString()}");
+     await Dio().post<dynamic>(url, data: FormData.fromMap(data));
   }
 
   Future<void> removeFromCart(CartFoods silinecekYemek) async {
@@ -43,23 +42,21 @@ class FoodsDaoRepository {
       "sepet_yemek_id": silinecekYemek.id,
       "kullanici_adi": silinecekYemek.kullaniciAdi,
     };
-    var response = await Dio().post(url, data: FormData.fromMap(data));
-    print("Sepetten yemek silindi: ${response.data.toString()}");
+    await Dio().post<Map<String, dynamic>>(url, data: FormData.fromMap(data));
   }
 
   Future<List<CartFoods>> loadCartFoods() async {
-    var url = "http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php";
-    var userId = {"kullanici_adi": "hsefakcay"};
+    const url = 'http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php';
+    final userId = {'kullanici_adi': 'hsefakcay'};
 
     try {
-      var response = await Dio().post(url, data: FormData.fromMap(userId));
+      var response = await Dio().post<Map<String, dynamic>>(url, data: FormData.fromMap(userId));
 
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.data.toString());
 
         // Gelen JSON'da success değeri kontrol ediliyor
         if (jsonData['success'] == 1 && jsonData['sepet_yemekler'] != null) {
-          print("AAAA");
           return parseCartFoods(response.data.toString());
         } else {
           print("Sepet boş ya da kullanıcının sepeti bulunamadı.");

@@ -1,5 +1,5 @@
+import 'package:yemek_soyle_app/app/assets/database/sqlite/database_helper.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
-import 'package:yemek_soyle_app/assets/database/sqlite/database_helper.dart';
 
 class FavoritesRepository {
   Future<List<Foods>> loadFavoriteFoods() async {

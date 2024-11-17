@@ -32,25 +32,33 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+    
+  # Localization
   intl: ^0.19.0
-
+  
+  # Notifications
   flutter_local_notifications: ^17.2.3
 
+  # Services
   dio: ^5.7.0
   flutter_bloc: ^8.1.6
   
+  # Database
   path: ^1.9.0
   sqflite: ^2.3.3+2
   
+  # Utility
   logger: ^2.4.0
   lottie: ^3.1.2
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  fluttertoast: 
+  
+  # Icons
   cupertino_icons: ^1.0.2
   
+  # Firebase
   firebase_core: ^3.4.1
   firebase_auth: ^5.2.1
-  fluttertoast: 
+
 
 
 dev_dependencies:
@@ -84,7 +92,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - database/yemek_soyle.sqlite
-    - lib/assets/animations/food_animation.json
+    - lib/app/assets/animations/food_animation.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

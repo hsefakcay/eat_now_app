@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/cart_foods.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
-import 'package:yemek_soyle_app/app/data/repo/favoritesdao_repository.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
-import 'package:yemek_soyle_app/app/ui/views/cart_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/cart_page/cart_view.dart';
+import 'package:yemek_soyle_app/app/ui/views/detail_page/detail_view_mixin.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/add_or_remove_button_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/detail_chip_widget.dart';
 import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
@@ -18,57 +18,19 @@ class DetailView extends StatefulWidget {
   final Foods food; // Immutable olmalı
 
   const DetailView({
-    Key? key,
     required this.food,
+    Key? key,
   }) : super(key: key);
 
   @override
   State<DetailView> createState() => _DetailViewState();
 }
 
-class _DetailViewState extends State<DetailView> {
-  int siparisAdet = 0;
-  bool isFavorite = false;
-
-  final FavoritesRepository favoritesRepository = FavoritesRepository();
-
-  final String _userName = "hsefakcay";
-
+class _DetailViewState extends State<DetailView> with DetailViewMixin {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _checkIfFavorite();
-  }
-
-  // Favori kontrolü async yapılır
-  Future<void> _checkIfFavorite() async {
-    bool result = await favoritesRepository.isFavoriteFood(widget.food.ad);
-    setState(() {
-      isFavorite = result;
-    });
-  }
-
-  // Sipariş adedini artırma fonksiyonu
-  void _incrementOrderQuantity() {
-    setState(() {
-      siparisAdet++;
-    });
-  }
-
-  void _decrementOrderQuantity() {
-    setState(() {
-      if (siparisAdet > 0) {
-        siparisAdet--;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    var height = ScreenUtil.screenHeight(context);
-    var width = ScreenUtil.screenWidth(context);
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
@@ -90,14 +52,15 @@ class _DetailViewState extends State<DetailView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(height: height * 0.05),
+            SizedBox(height: ScreenUtil.screenHeight(context) * 0.05),
             _favoriteInfoRow(localizations),
-            FoodImage(height: height, name: widget.food.resim),
+            FoodImage(height: ScreenUtil.screenHeight(context), name: widget.food.resim),
             _foodDetails(context),
             _orderQuantityRow(context),
             _detailChips(localizations),
-            SizedBox(height: height * 0.05),
-            _totalPriceRow(width, height, localizations, context),
+            SizedBox(height: ScreenUtil.screenHeight(context) * 0.05),
+            _totalPriceRow(ScreenUtil.screenWidth(context), ScreenUtil.screenHeight(context),
+                localizations, context),
           ],
         ),
       ),
@@ -129,7 +92,7 @@ class _DetailViewState extends State<DetailView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AddOrRemoveButtonWidget(process: _decrementOrderQuantity, icon: Icons.remove),
+        AddOrRemoveButtonWidget(process: decrementOrderQuantity, icon: Icons.remove),
         Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(
@@ -137,7 +100,7 @@ class _DetailViewState extends State<DetailView> {
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        AddOrRemoveButtonWidget(process: _incrementOrderQuantity, icon: Icons.add),
+        AddOrRemoveButtonWidget(process: incrementOrderQuantity, icon: Icons.add),
       ],
     );
   }
@@ -164,7 +127,7 @@ class _DetailViewState extends State<DetailView> {
                   resim: widget.food.resim,
                   fiyat: widget.food.fiyat,
                   siparisAdet: siparisAdet.toString(),
-                  kullaniciAdi: _userName);
+                  kullaniciAdi: userName);
               context.read<CartPageCubit>().addToCart(cartItem);
 
               Navigator.push(

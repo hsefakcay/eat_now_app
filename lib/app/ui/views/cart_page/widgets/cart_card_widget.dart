@@ -11,10 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CartCardWidget extends StatefulWidget {
   const CartCardWidget({
     super.key,
-    required this.yemek,
+    required this.food,
   });
 
-  final CartFoods yemek;
+  final CartFoods food;
 
   @override
   State<CartCardWidget> createState() => _cartCardWidgetState();
@@ -26,12 +26,12 @@ class _cartCardWidgetState extends State<CartCardWidget> {
     final localizations = AppLocalizations.of(context)!;
 
     return Dismissible(
-      key: Key(widget.yemek.id.toString()),
+      key: Key(widget.food.id.toString()),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         //sepetten yemek sil
-        context.read<CartPageCubit >().removeFromCart(widget.yemek);
-        context.read<CartPageCubit >().loadCartFoods();
+        context.read<CartPageCubit>().removeFromCart(widget.food);
+        context.read<CartPageCubit>().loadCartFoods();
       },
       background: Container(
         decoration: ProjectUtility.cartDismissibleBoxDecoration,
@@ -56,7 +56,7 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Image.network(
-                    "http://kasimadalan.pe.hu/yemekler/resimler/${widget.yemek.resim}",
+                    "http://kasimadalan.pe.hu/yemekler/resimler/${widget.food.resim}",
                     width: ScreenUtil.screenWidth(context) * 0.3,
                   ),
                 ),
@@ -64,14 +64,14 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.yemek.ad,
+                    Text(widget.food.ad,
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge
                             ?.copyWith(fontWeight: FontWeight.w900)),
-                    Text("${localizations.price}₺ ${widget.yemek.fiyat}",
+                    Text("${localizations.price}₺ ${widget.food.fiyat}",
                         style: Theme.of(context).textTheme.titleMedium),
-                    Text("${localizations.count} ${widget.yemek.siparisAdet}",
+                    Text("${localizations.count} ${widget.food.siparisAdet}",
                         style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
@@ -85,8 +85,8 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        context.read<CartPageCubit >().removeFromCart(widget.yemek);
-                        context.read<CartPageCubit >().loadCartFoods();
+                        context.read<CartPageCubit>().removeFromCart(widget.food);
+                        context.read<CartPageCubit>().loadCartFoods();
                       },
                       icon: Icon(
                         Icons.delete,
@@ -94,7 +94,7 @@ class _cartCardWidgetState extends State<CartCardWidget> {
                         color: AppColor.primaryColor,
                       )),
                   Text(
-                    "₺${int.parse(widget.yemek.fiyat) * int.parse(widget.yemek.siparisAdet)}",
+                    "₺${int.parse(widget.food.fiyat) * int.parse(widget.food.siparisAdet)}",
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
