@@ -1,22 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_image_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/favorite_button_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/food_image_widget.dart';
 
 class FoodCardWidget extends StatefulWidget {
-  Foods yemek;
+  Foods food;
   bool isFavoritePage;
 
   FoodCardWidget({
-    Key? key,
-    required this.yemek,
+    required this.food,
     required this.isFavoritePage,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FoodCardWidget> createState() => _FoodCardState();
@@ -33,19 +33,29 @@ class _FoodCardState extends State<FoodCardWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Stack(children: [
-            FoodImage(height: ScreenUtil.screenHeight(context) * 0.5, name: widget.yemek.resim),
-            Positioned(
-                top: 0,
-                right: 0,
-                child: FavoriteButtonWidget(
-                  yemek: widget.yemek,
-                  isFavoritePage: widget.isFavoritePage,
-                )),
-          ]),
+          Stack(
+            children: [
+              FoodImage(
+                height: ScreenUtil.screenHeight(context) * 0.5,
+                name: widget.food.image,
+              ),
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: FavoriteButtonWidget(
+                    food: widget.food,
+                    isFavoritePage: widget.isFavoritePage,
+                  )),
+            ],
+          ),
           Text(
-            "${widget.yemek.ad}",
-            style: TextStyle(color: AppColor.blackColor, fontWeight: FontWeight.bold, fontSize: 24),
+            widget.food.name,
+            // ignore: flutter_style_todos
+            style: TextStyle(
+              color: AppColor.blackColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,23 +70,24 @@ class _FoodCardState extends State<FoodCardWidget> {
               ),
               Text(
                 //defalut atama
-                "% 87 ${localizations.liked}",
-                style: TextStyle(color: Colors.green, fontSize: 13),
-              )
+                '% 87 ${localizations.liked}',
+                style: const TextStyle(color: Colors.green, fontSize: 13),
+              ),
             ],
           ),
-          SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(left: 12, bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "₺ ${widget.yemek.fiyat}",
+                  '₺ ${widget.food.price}',
                   style: TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold, color: AppColor.blackColor),
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.blackColor,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -88,7 +99,7 @@ class _FoodCardState extends State<FoodCardWidget> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

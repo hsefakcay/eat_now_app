@@ -6,7 +6,7 @@ import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_page/detail_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/favorites_page/favorites_view_mixin.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/food_card_widget.dart';
 
 class FavoritesView extends StatefulWidget {
   const FavoritesView({super.key});
@@ -47,7 +47,7 @@ class _FavoritesPageState extends State<FavoritesView> with FavoritesViewMixin {
                                 builder: (context) => DetailView(food: food),
                               ));
                         },
-                        child: FoodCardWidget(yemek: food, isFavoritePage: true));
+                        child: FoodCardWidget(food: food, isFavoritePage: true));
                   },
                 ),
               );

@@ -5,15 +5,9 @@ class FavoritesRepository {
   Future<List<Foods>> loadFavoriteFoods() async {
     var db = await DatabaseHelper.accesToDatabase();
     // Delete rows where 'ad' is null
-    await db.rawDelete("DELETE FROM favori_yemekler WHERE ad IS NULL");
+    await db.rawDelete('DELETE FROM favori_yemekler WHERE ad IS NULL');
 
-    List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * FROM favori_yemekler");
-
-    if (maps.isEmpty) {
-      print("MAPS EMPTY");
-    } else {
-      print("MAPS NOT EMPTY");
-    }
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM favori_yemekler');
 
     return List.generate(
       maps.length,
@@ -21,9 +15,9 @@ class FavoritesRepository {
         var row = maps[index];
         return Foods(
             id: row["id"].toString(),
-            ad: row["ad"].toString(),
-            resim: row["resim"].toString(),
-            fiyat: row["fiyat"].toString());
+            name: row["ad"].toString(),
+            image: row["resim"].toString(),
+            price: row["fiyat"].toString());
       },
     );
   }
@@ -32,24 +26,24 @@ class FavoritesRepository {
     var db = await DatabaseHelper.accesToDatabase();
 
     var favoriteFood = Map<String, dynamic>();
-    favoriteFood["ad"] = food.ad;
-    favoriteFood["resim"] = food.resim;
-    favoriteFood["fiyat"] = int.parse(food.fiyat);
+    favoriteFood["ad"] = food.name;
+    favoriteFood["resim"] = food.image;
+    favoriteFood["fiyat"] = int.parse(food.price);
 
-    await db.insert("favori_yemekler", favoriteFood);
+    await db.insert('favori_yemekler', favoriteFood);
   }
 
   Future<void> removeFromFavorites(String foodName) async {
     var db = await DatabaseHelper.accesToDatabase();
 
-    await db.delete("favori_yemekler", where: "ad = ?", whereArgs: [foodName]);
+    await db.delete('favori_yemekler', where: 'ad = ?', whereArgs: [foodName]);
   }
 
   Future<bool> isFavoriteFood(String foodName) async {
     var db = await DatabaseHelper.accesToDatabase();
 
     List<Map<String, dynamic>> result =
-        await db.query("favori_yemekler", where: "ad = ?", whereArgs: [foodName]);
+        await db.query('favori_yemekler', where: 'ad = ?', whereArgs: [foodName]);
     // If the result list is not empty, the food is in favorites.
     return result.isNotEmpty;
   }

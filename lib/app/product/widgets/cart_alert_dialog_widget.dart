@@ -4,7 +4,7 @@ import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/ui/views/main_tab_page/main_tab_view.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/lottie_shadow_container_widget.dart';
 
 class CartDialog extends AlertDialog {
   CartDialog({required BuildContext context, Key? key})

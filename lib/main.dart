@@ -4,12 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:yemek_soyle_app/app/core/constants/color.dart';
+import 'package:yemek_soyle_app/app/core/theme/light_theme.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/login_page/login_view.dart';
 import 'package:yemek_soyle_app/firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -46,25 +47,9 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
-        supportedLocales: const [
-          Locale("en", ""),
-          Locale("tr", ""),
-        ],
+        supportedLocales: const [Locale('en', ''), Locale('tr', '')],
         title: 'Yemek Soyle',
-        theme: ThemeData.light(
-          useMaterial3: true,
-        ).copyWith(
-            elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-              backgroundColor: AppColor.primaryColor,
-              foregroundColor: AppColor.whiteColor,
-              iconColor: AppColor.whiteColor,
-            )),
-            appBarTheme: AppBarTheme(
-              backgroundColor: AppColor.whiteColor,
-              centerTitle: true,
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-            )),
+        theme: lightTheme,
         home: LoginView(),
       ),
     );

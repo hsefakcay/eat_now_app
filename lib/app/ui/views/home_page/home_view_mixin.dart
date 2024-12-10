@@ -24,9 +24,9 @@ mixin HomeViewMixin on State<HomeView> {
   void sortNameFood(List<Foods> yemeklerListesi, bool isDesc) {
     Comparator<Foods> sortName;
     if (isDesc == true) {
-      sortName = (a, b) => a.ad.compareTo(b.ad);
+      sortName = (a, b) => a.name.compareTo(b.name);
     } else {
-      sortName = (a, b) => b.ad.compareTo(a.ad);
+      sortName = (a, b) => b.name.compareTo(a.name);
     }
     yemeklerListesi.sort(sortName);
   }
@@ -35,9 +35,9 @@ mixin HomeViewMixin on State<HomeView> {
     Comparator<Foods> sortName;
 
     if (isDesc == true) {
-      sortName = (a, b) => (int.parse(a.fiyat)).compareTo(int.parse(b.fiyat));
+      sortName = (a, b) => (int.parse(a.price)).compareTo(int.parse(b.price));
     } else {
-      sortName = (a, b) => (int.parse(b.fiyat)).compareTo(int.parse(a.fiyat));
+      sortName = (a, b) => (int.parse(b.price)).compareTo(int.parse(a.price));
     }
     yemeklerListesi.sort(sortName);
   }

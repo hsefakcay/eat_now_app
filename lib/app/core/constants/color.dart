@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppColor {
   static Color primaryColor = Color.fromARGB(255, 243, 124, 45);

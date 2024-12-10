@@ -7,9 +7,9 @@ import 'package:yemek_soyle_app/app/data/entity/foods.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/home_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_page/detail_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/home_page/home_view_mixin.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_card_widget.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/lottie_shadow_container_widget.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/search_text_field_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/food_card_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/lottie_shadow_container_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/search_text_field_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomeView> with HomeViewMixin {
                                       builder: (context) => DetailView(food: yemek)),
                                 );
                               },
-                              child: FoodCardWidget(yemek: yemek, isFavoritePage: false),
+                              child: FoodCardWidget(food: yemek, isFavoritePage: false),
                             );
                           },
                         ),

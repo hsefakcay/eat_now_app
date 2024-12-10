@@ -3,7 +3,7 @@ import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/ui/views/main_tab_page/main_tab_mixin.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/floating_actions_button.dart';
+import 'package:yemek_soyle_app/app/product/widgets/floating_actions_button.dart';
 
 class MainPage extends StatefulWidget {
   final int currentIndex;

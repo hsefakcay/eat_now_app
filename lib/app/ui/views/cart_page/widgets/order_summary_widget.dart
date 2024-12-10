@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:yemek_soyle_app/app/core/utils/project_utility.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/cart_text_button_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/cart_text_button_widget.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   const OrderSummaryWidget({

@@ -9,11 +9,11 @@ import 'package:yemek_soyle_app/app/ui/cubit/favorites_page_cubit.dart';
 class FavoriteButtonWidget extends StatefulWidget {
   FavoriteButtonWidget({
     Key? key,
-    required this.yemek,
+    required this.food,
     required this.isFavoritePage,
   }) : super(key: key);
 
-  final Foods yemek;
+  final Foods food;
   bool isFavoritePage;
 
   @override
@@ -34,11 +34,11 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
   }
 
   Future<void> _checkIfFavorite() async {
-    bool result = await favRepo.isFavoriteFood(widget.yemek.ad);
+    bool result = await favRepo.isFavoriteFood(widget.food.name);
     setState(() {
       isFavorite = result;
       if (isFavorite) {
-        print("${widget.yemek.ad} favori yemek");
+        print("${widget.food.name} favori yemek");
       }
     });
   }
@@ -46,9 +46,9 @@ class _FavoriteButtonState extends State<FavoriteButtonWidget> {
   void _toggleFavorite() {
     setState(() {
       if (isFavorite == false) {
-        favRepo.addToFavorites(widget.yemek);
+        favRepo.addToFavorites(widget.food);
       } else {
-        favRepo.removeFromFavorites(widget.yemek.ad);
+        favRepo.removeFromFavorites(widget.food.name);
       }
       isFavorite = !isFavorite;
       //silindiğinde sayfa güncellemesi

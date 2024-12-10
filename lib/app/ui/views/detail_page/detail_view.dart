@@ -1,26 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:yemek_soyle_app/app/core/constants/color.dart';
 import 'package:yemek_soyle_app/app/core/constants/icon_sizes.dart';
 import 'package:yemek_soyle_app/app/core/utils/screen_utility.dart';
 import 'package:yemek_soyle_app/app/data/entity/cart_foods.dart';
 import 'package:yemek_soyle_app/app/data/entity/foods.dart';
+import 'package:yemek_soyle_app/app/product/widgets/add_or_remove_button_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/detail_chip_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/favorite_button_widget.dart';
+import 'package:yemek_soyle_app/app/product/widgets/food_image_widget.dart';
 import 'package:yemek_soyle_app/app/ui/cubit/cart_page_cubit.dart';
 import 'package:yemek_soyle_app/app/ui/views/cart_page/cart_view.dart';
 import 'package:yemek_soyle_app/app/ui/views/detail_page/detail_view_mixin.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/add_or_remove_button_widget.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/detail_chip_widget.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/favorite_button_widget.dart';
-import 'package:yemek_soyle_app/app/ui/widgets/food_image_widget.dart';
 
 class DetailView extends StatefulWidget {
   final Foods food; // Immutable olmalı
 
   const DetailView({
     required this.food,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<DetailView> createState() => _DetailViewState();
@@ -44,7 +46,7 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: FavoriteButtonWidget(yemek: widget.food, isFavoritePage: false),
+            child: FavoriteButtonWidget(food: widget.food, isFavoritePage: false),
           )
         ],
       ),
@@ -54,7 +56,7 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
           children: [
             SizedBox(height: ScreenUtil.screenHeight(context) * 0.05),
             _favoriteInfoRow(localizations),
-            FoodImage(height: ScreenUtil.screenHeight(context), name: widget.food.resim),
+            FoodImage(height: ScreenUtil.screenHeight(context), name: widget.food.image),
             _foodDetails(context),
             _orderQuantityRow(context),
             _detailChips(localizations),
@@ -77,12 +79,13 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
           child: Center(
             child: Text(
               //toplam tutar
-              "₺ ${int.parse(widget.food.fiyat) * siparisAdet}",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              '₺ ${int.parse(widget.food.price) * orderQuantity}',
+              //TODO: Use Theme.of(context).textTheme to provide the style dynamically
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        _addToCartButton(height, width, localizations, context)
+        _addToCartButton(height, width, localizations, context),
       ],
     );
   }
@@ -96,7 +99,7 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
         Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(
-            "$siparisAdet",
+            "$orderQuantity",
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -118,15 +121,15 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
                   .headlineSmall
                   ?.copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold)),
           onPressed: () {
-            if (siparisAdet > 0) {
+            if (orderQuantity > 0) {
               //Sepete ekleme fonksiyonu ve sepet sayfasına gitme
 
               final cartItem = CartFoods(
                   id: widget.food.id,
-                  ad: widget.food.ad,
-                  resim: widget.food.resim,
-                  fiyat: widget.food.fiyat,
-                  siparisAdet: siparisAdet.toString(),
+                  ad: widget.food.name,
+                  resim: widget.food.image,
+                  fiyat: widget.food.price,
+                  siparisAdet: orderQuantity.toString(),
                   kullaniciAdi: userName);
               context.read<CartPageCubit>().addToCart(cartItem);
 
@@ -175,10 +178,10 @@ class _DetailViewState extends State<DetailView> with DetailViewMixin {
   Column _foodDetails(BuildContext context) {
     return Column(
       children: [
-        Text(widget.food.ad,
+        Text(widget.food.name,
             style:
                 Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
-        Text("₺ ${widget.food.fiyat}",
+        Text('₺ ${widget.food.price}',
             style:
                 Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
       ],

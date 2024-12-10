@@ -19,8 +19,8 @@ class HomeCubit extends Cubit<List<Foods>> {
     if (query.isEmpty) {
       emit(list);
     } else {
-      final filteredList = list.where((yemek) {
-        return yemek.ad.toLowerCase().contains(query.toLowerCase());
+      final filteredList = list.where((food) {
+        return food.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
       emit(filteredList);
     }

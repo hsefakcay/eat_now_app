@@ -50,7 +50,7 @@ dependencies:
   # Utility
   logger: ^2.4.0
   lottie: ^3.1.2
-  fluttertoast: 
+  fluttertoast: ^8.2.8
   
   # Icons
   cupertino_icons: ^1.0.2
