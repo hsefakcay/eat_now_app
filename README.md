@@ -29,6 +29,23 @@ YemekSöyleApp, kullanıcıların çeşitli yiyecekleri gözden geçirebileceği
 
 ---
 
+## 🛠️ Installation- Kurulum
+
+- Clone the repository:
+```plaintext
+git clone https://github.com/hsefakcay/eat_now_app
+cd eatNowApp
+```
+
+- Install the dependencies:
+```plaintext
+flutter pub get
+```
+
+- Run the application:
+```plaintext
+flutter run
+```
 ## 🎥 Screenshots - Uygulama Görüntüleri
 ![image](https://github.com/user-attachments/assets/3f7c4a2d-dd33-4e3c-bbf7-d99b387f2d1c)
 
