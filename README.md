@@ -33,7 +33,7 @@ YemekSöyleApp, kullanıcıların çeşitli yiyecekleri gözden geçirebileceği
 
 - Clone the repository:
 ```plaintext
-git clone https://github.com/hsefakcay/eat_now_app
+git clone https://github.com/hsefakcay/eat_now_app.git
 cd eatNowApp
 ```
 
